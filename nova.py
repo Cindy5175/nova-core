@@ -111,7 +111,7 @@ with st.sidebar:
 
 # Encabezado principal
 st.title("🟢 N.O.V.A. // AI Autónoma II")
-st.markdown("— *Consola con Enlace de Voz Bidireccional y Texto Activo* —")
+st.markdown("— *Consola Táctica con Enlace de Texto y Voz* —")
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -122,25 +122,8 @@ for message in st.session_state.messages:
         if "audio" in message and message["audio"]:
             st.audio(message["audio"], format="audio/mp3")
 
-# Canal de entrada dual: Micrófono interactivo por voz y Chat de texto tradicional
-col_voz, col_texto = st.columns([1, 2])
-
-with col_voz:
-    st.markdown("🎙️ **Enlace de Voz:**")
-    audio_file = st.audio_input("Hable con N.O.V.A.")
-
-prompt_texto = st.chat_input("O ingrese comando por texto para N.O.V.A...")
-
-# Determinar si la entrada viene por voz o por texto
-prompt = None
-if audio_file is not None:
-    prompt = "[Transmisión de Voz Capturada por el Micrófono]"
-    # Opcional: guardar temporalmente el audio del usuario si se desea reproducir
-    user_audio_path = "user_input.wav"
-    with open(user_audio_path, "wb") as f:
-        f.write(audio_file.getbuffer())
-elif prompt_texto:
-    prompt = prompt_texto
+# Entrada de texto principal robusta y limpia
+prompt = st.chat_input("Ingrese comando, consulta o instrucción para N.O.V.A...")
 
 if prompt:
     st.session_state.messages.append({"role": "user", "content": prompt})
@@ -154,10 +137,8 @@ if prompt:
         fecha_actual_str = datetime.now().strftime("%d/%m/%Y")
         p_lower = prompt.lower()
         
-        if "transmisión de voz" in prompt:
-            reply = f"¡Audio recibido con éxito, Jefa! Analizado a las {hora_actual_str}. Núcleo de voz bidireccional operando al 100%."
-        elif "hola" in p_lower:
-            reply = f"¡Saludos, Jefa! Son las {hora_actual_str} del {fecha_actual_str}. N.O.V.A. en línea con enlace de voz y texto bidireccional."
+        if "hola" in p_lower:
+            reply = f"¡Saludos, Jefa! Son las {hora_actual_str} del {fecha_actual_str}. N.O.V.A. en línea y operando con el núcleo táctico activo. ¿Qué órdenes tenemos?"
         elif "hora" in p_lower or "fecha" in p_lower:
             reply = f"Información temporal del sistema: Hoy es {fecha_actual_str} y son exactamente las {hora_actual_str}."
         elif "bitcoin" in p_lower or "btc" in p_lower or "precio" in p_lower:
@@ -167,11 +148,11 @@ if prompt:
         elif "purga" in p_lower:
             reply = "Secuencia de purga disponible desde el panel lateral izquierdo, Jefa."
         else:
-            reply = f"Comando táctico recibido y procesado en modo dual bidireccional, Jefa."
+            reply = f"Comando táctico recibido y procesado correctamente, Jefa: '{prompt}'."
         
         st.markdown(reply)
         
-        # Generar respuesta de audio sintetizada (gTTS)
+        # Generar respuesta de audio sintetizada (gTTS) que se reproduce automáticamente
         try:
             from gtts import gTTS
             tts = gTTS(text=reply, lang='es')
