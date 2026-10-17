@@ -1,12 +1,11 @@
 import streamlit as st
-import os
 import requests
 from google import genai
 from puente_jarvis_nova import PuenteTactico
 
-# Inicializar el puente dual y cliente de Gemini
+# Inicializar el puente dual y cliente de Gemini con la nueva clave
 puente = PuenteTactico()
-client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
+client = genai.Client(api_key="AQ.Ab8RN6JrkHX_Qfqyas6PskPgyzhJiKj6E-wuy62AJdUh9OQAhg")
 
 st.set_page_config(page_title="N.O.V.A. - Núcleo Táctico", page_icon="🟢", layout="wide")
 
@@ -50,7 +49,7 @@ with col2:
 
 st.divider()
 
-# Consola Central de Chat con Gemini
+# Consola Central de Operaciones
 st.subheader("Consola Central de Operaciones")
 
 if "messages" not in st.session_state:
