@@ -69,7 +69,6 @@ with st.sidebar:
     # Módulo Satelital V.I.E.R.N.E.S. y Mapa de ubicación (Buin)
     with st.expander("🛰️ Satélite V.I.E.R.N.E.S.", expanded=True):
         st.caption("Ubicación: Buin, Stgo (Región Metropolitana)")
-        # Coordenadas aproximadas de Buin para el mapa en miniatura
         import pandas as pd
         map_data = pd.DataFrame(
             [[-33.7331, -70.7423]],
@@ -85,8 +84,8 @@ with st.sidebar:
         st.session_state.messages = []
         st.rerun()
 
-# Consola Central de Operaciones principal
-st.title("🟢 N.O.V.A. // Consola Central de Operaciones")
+# Encabezado principal actualizado
+st.title("🟢 N.O.V.A. // AI Autónoma II")
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
