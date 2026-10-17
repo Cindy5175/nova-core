@@ -3,7 +3,7 @@ import requests
 from google import genai
 from puente_jarvis_nova import PuenteTactico
 
-# Inicializar el puente dual y cliente de Gemini con la llave activa
+# Inicializar el puente dual y cliente de Gemini con una API Key válida de Google AI Studio (ej. AIza...)
 puente = PuenteTactico()
 client = genai.Client(api_key="AQ.Ab8RN6JrkHX_Qfqyas6PskPgyzhJiKj6E-wuy62AJdUh9OQAhg")
 
