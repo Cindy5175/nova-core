@@ -1,37 +1,47 @@
-import json
+# Puente Táctico Binario: J.A.R.V.I.S. & N.O.V.A.
 import os
-import time
+import json
+from datetime import datetime
 
-ARCHIVO_MEMORIA = "memoria_compartida.json"
+class PuenteTactico:
+    def __init__(self, archivo_log="registro_dual.json"):
+        self.archivo_log = archivo_log
+        self.inicializar_log()
 
+    def inicializar_log(self):
+        if not os.path.exists(self.archivo_log):
+            datos_iniciales = {
+                "ultima_sincronizacion": str(datetime.now()),
+                "estado_sistema": "OPERATIVO_DUAL",
+                "registros": []
+            }
+            with open(self.archivo_log, "w", encoding="utf-8") as f:
+                json.dump(datos_iniciales, f, ensure_ascii=False, indent=4)
 
-def inicializar_memoria():
-    if not os.path.exists(ARCHIVO_MEMORIA):
-        datos_iniciales = {
-            "ultima_directiva": "Sin directivas recientes",
-            "origen": "N.O.V.A.",
-            "estado_jarvis": "STANDBY",
-            "respuestas_jarvis": [
-                "J.A.R.V.I.S. vinculado y a la espera de comandos, Jefa."
-            ],
-        }
-        with open(ARCHIVO_MEMORIA, "w", encoding="utf-8") as f:
-            json.dump(datos_iniciales, f, ensure_ascii=False, indent=4)
+    def registrar_transmision(self, origen, mensaje):
+        try:
+            with open(self.archivo_log, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            
+            nuevo_registro = {
+                "origen": origen,
+                "timestamp": str(datetime.now()),
+                "mensaje": mensaje
+            }
+            data["registros"].append(nuevo_registro)
+            data["ultima_sincronizacion"] = str(datetime.now())
 
+            with open(self.archivo_log, "w", encoding="utf-8") as f:
+                json.dump(data, f, ensure_ascii=False, indent=4)
+            return True
+        except Exception as e:
+            print(f"Error en enlace dual: {e}")
+            return False
 
-def guardar_directiva(mensaje):
-    inicializar_memoria()
-    with open(ARCHIVO_MEMORIA, "r", encoding="utf-8") as f:
-        datos = json.load(f)
-
-    datos["ultima_directiva"] = mensaje
-    datos["origen"] = "N.O.V.A. Mobile"
-
-    with open(ARCHIVO_MEMORIA, "w", encoding="utf-8") as f:
-        json.dump(datos, f, ensure_ascii=False, indent=4)
-
-
-def leer_memoria():
-    inicializar_memoria()
-    with open(ARCHIVO_MEMORIA, "r", encoding="utf-8") as f:
-        return json.load(f)
+    def leer_ultimos_registros(self, limite=5):
+        try:
+            with open(self.archivo_log, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            return data["registros"][-limite:]
+        except Exception:
+            return []
