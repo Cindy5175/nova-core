@@ -2,10 +2,31 @@ import streamlit as st
 import requests
 import streamlit.components.v1 as components
 from datetime import datetime
-from puente_jarvis_nova import PuenteTactico
 
-# Inicializar el puente dual
-puente = PuenteTactico()
+# --- CLASE INTERNA DE ENLACE TÁCTICO (Puente J.A.R.V.I.S. integrado) ---
+class PuenteTacticoUnificado:
+    def __init__(self):
+        if "telemetria_jarvis" not in st.session_state:
+            st.session_state.telemetria_jarvis = [
+                {"origen": "JARVIS", "timestamp": str(datetime.now()), "mensaje": "Sistemas principales sincronizados."},
+                {"origen": "VIERNES", "timestamp": str(datetime.now()), "mensaje": "Satélite en órbita sobre Buin."}
+            ]
+
+    def registrar_transmision(self, origen, mensaje):
+        nuevo_registro = {
+            "origen": origen,
+            "timestamp": str(datetime.now()),
+            "mensaje": mensaje
+        }
+        st.session_state.telemetria_jarvis.insert(0, nuevo_registro)
+        if len(st.session_state.telemetria_jarvis) > 10:
+            st.session_state.telemetria_jarvis.pop()
+
+    def leer_ultimos_registros(self, cantidad=3):
+        return st.session_state.telemetria_jarvis[:cantidad]
+
+# Inicializar el puente unificado
+puente = PuenteTacticoUnificado()
 
 st.set_page_config(page_title="N.O.V.A. - Núcleo Táctico", page_icon="🟢", layout="wide")
 
@@ -111,7 +132,7 @@ with st.sidebar:
 
 # Encabezado principal
 st.title("🟢 N.O.V.A. // AI Autónoma II")
-st.markdown("— *Consola Táctica con Enlace de Texto y Voz* —")
+st.markdown("— *Consola Táctica con Núcleo Gemini & Enlace J.A.R.V.I.S.* —")
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
