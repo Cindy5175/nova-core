@@ -42,7 +42,7 @@ with st.sidebar:
     st.markdown("— *Modo Dual Activo* —")
     st.divider()
     
-    # Módulo Financiero compacto (usando un expander pequeño)
+    # Módulo Financiero compacto
     with st.expander("📊 Finanzas (En vivo)", expanded=False):
         try:
             url_crypto = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether&vs_currencies=usd,clp"
@@ -66,25 +66,25 @@ with st.sidebar:
         else:
             st.caption("Sin transmisiones.")
 
-    # Módulo Satelital V.I.E.R.N.E.S. y Mapa de ubicación (Buin)
+    # Módulo Satelital V.I.E.R.N.E.S. con mapa reducido en altura
     with st.expander("🛰️ Satélite V.I.E.R.N.E.S.", expanded=True):
-        st.caption("Ubicación: Buin, Stgo (Región Metropolitana)")
+        st.caption("Ubicación: Buin, Stgo")
         import pandas as pd
         map_data = pd.DataFrame(
             [[-33.7331, -70.7423]],
             columns=['lat', 'lon']
         )
-        st.map(map_data, zoom=10, use_container_width=True)
+        st.map(map_data, zoom=9, use_container_width=True, height=150)
 
     st.divider()
     
-    # Módulo de Purga (mismo color y estilo táctico)
+    # Módulo de Purga
     st.subheader("🧹 Módulo de Purga")
     if st.button("Ejecutar Purga de Chat", use_container_width=True):
         st.session_state.messages = []
         st.rerun()
 
-# Encabezado principal actualizado
+# Encabezado principal
 st.title("🟢 N.O.V.A. // AI Autónoma II")
 
 if "messages" not in st.session_state:
@@ -103,7 +103,6 @@ if prompt := st.chat_input("Ingrese comando o consulta para N.O.V.A..."):
     puente.registrar_transmision("NOVA", prompt)
 
     with st.chat_message("assistant"):
-        # Motor de respuestas de respaldo local inteligente y fluido
         p_lower = prompt.lower()
         if "hola" in p_lower:
             reply = "¡Saludos, Jefa! N.O.V.A. en línea y operando con el núcleo táctico de respaldo activo. ¿Qué órdenes tenemos para hoy?"
