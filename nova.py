@@ -1,5 +1,6 @@
 import streamlit as st
 import requests
+from datetime import datetime
 from puente_jarvis_nova import PuenteTactico
 
 # Inicializar el puente dual
@@ -29,7 +30,6 @@ st.markdown("""
     [data-testid="stMetricValue"] {
         color: #00ff66 !important;
     }
-    /* Estilo compacto para elementos en la barra lateral */
     section[data-testid="stSidebar"] .block-container {
         padding-top: 1rem;
     }
@@ -42,6 +42,14 @@ with st.sidebar:
     st.markdown("— *Modo Dual Activo* —")
     st.divider()
     
+    # Módulo de Fecha y Hora en tiempo real
+    now = datetime.now()
+    fecha_actual = now.strftime("%d/%m/%Y")
+    hora_actual = now.strftime("%H:%M:%S")
+    st.markdown(f"📅 **Fecha:** {fecha_actual}")
+    st.markdown(f"⏰ **Hora:** {hora_actual}")
+    st.divider()
+
     # Módulo Financiero compacto
     with st.expander("📊 Finanzas (En vivo)", expanded=False):
         try:
@@ -66,7 +74,7 @@ with st.sidebar:
         else:
             st.caption("Sin transmisiones.")
 
-    # Módulo Satelital V.I.E.R.N.E.S. con mapa reducido en altura
+    # Módulo Satelital V.I.E.R.N.E.S. con mapa reducido
     with st.expander("🛰️ Satélite V.I.E.R.N.E.S.", expanded=True):
         st.caption("Ubicación: Buin, Stgo")
         import pandas as pd
@@ -86,6 +94,7 @@ with st.sidebar:
 
 # Encabezado principal
 st.title("🟢 N.O.V.A. // AI Autónoma II")
+st.markdown("— *Consola con Enlace de Voz y Texto Activo* —")
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -93,27 +102,45 @@ if "messages" not in st.session_state:
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
+        # Si el mensaje incluye audio adjunto de respuesta, reproducirlo
+        if "audio" in message and message["audio"]:
+            st.audio(message["audio"], format="audio/mp3")
 
-if prompt := st.chat_input("Ingrese comando o consulta para N.O.V.A..."):
+# Entrada de texto normal por chat
+prompt = st.chat_input("Ingrese comando, consulta o hable con N.O.V.A...")
+
+if prompt:
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
 
-    # Registrar en el puente dual
     puente.registrar_transmision("NOVA", prompt)
 
     with st.chat_message("assistant"):
         p_lower = prompt.lower()
         if "hola" in p_lower:
-            reply = "¡Saludos, Jefa! N.O.V.A. en línea y operando con el núcleo táctico de respaldo activo. ¿Qué órdenes tenemos para hoy?"
+            reply = f"¡Saludos, Jefa! Son las {hora_actual} del {fecha_actual}. N.O.V.A. en línea y operando con enlace de voz y texto. ¿Qué órdenes tenemos?"
+        elif "hora" in p_lower or "fecha" in p_lower:
+            reply = f"Información temporal del sistema: Hoy es {fecha_actual} y son exactamente las {hora_actual}."
         elif "bitcoin" in p_lower or "btc" in p_lower or "precio" in p_lower:
-            reply = "Los módulos financieros están enlazados en tiempo real en la barra lateral izquierda dentro de su respectivo panel compacto."
+            reply = "Los módulos financieros están enlazados en tiempo real en la barra lateral izquierda."
         elif "jarvis" in p_lower or "viernes" in p_lower:
-            reply = "Sistemas de enlace con J.A.R.V.I.S. y el satélite de V.I.E.R.N.E.S. sincronizados y monitoreando el sector de Buin."
+            reply = "Sistemas de enlace con J.A.R.V.I.S. y el satélite de V.I.E.R.N.E.S. sincronizados en Buin."
         elif "purga" in p_lower:
             reply = "Secuencia de purga disponible desde el panel lateral izquierdo, Jefa."
         else:
-            reply = f"Comando recibido y registrado en el sistema: '{prompt}'. Núcleo operativo y listo para la siguiente instrucción, Jefa."
+            reply = f"Comando recibido y procesado en modo dual (voz/texto): '{prompt}'."
         
         st.markdown(reply)
-        st.session_state.messages.append({"role": "assistant", "content": reply})
+        
+        # Generar síntesis de voz automática para contestar en ambas formas (Texto y Audio)
+        try:
+            from gtts import gTTS
+            import os
+            tts = gTTS(text=reply, lang='es')
+            audio_path = "respuesta_nova.mp3"
+            tts.save(audio_path)
+            st.audio(audio_path, format="audio/mp3", autoplay=True)
+            st.session_state.messages.append({"role": "assistant", "content": reply, "audio": audio_path})
+        except Exception:
+            st.session_state.messages.append({"role": "assistant", "content": reply})
