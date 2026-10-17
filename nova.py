@@ -1,13 +1,16 @@
 import streamlit as st
+import os
 import requests
+from google import genai
 from puente_jarvis_nova import PuenteTactico
 
-# Inicializar el puente dual
+# Inicializar el puente dual y cliente de Gemini
 puente = PuenteTactico()
+client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
 
 st.set_page_config(page_title="N.O.V.A. - Núcleo Táctico", page_icon="🟢", layout="wide")
 
-# Estilos visuales tácticos (preservando el diseño original)
+# Estilos visuales tácticos
 st.markdown("""
     <style>
     .main { background-color: #0e1117; color: #00ff66; }
@@ -18,13 +21,12 @@ st.markdown("""
 st.title("🟢 N.O.V.A. // IA Autónoma II")
 st.markdown("— *Enlace táctico con J.A.R.V.I.S. & Gemini Activo (Modo Dual)* —")
 
-# Sección de Módulos Tácticos
+# Sección de Módulos Tácticos superiores
 col1, col2 = st.columns(2)
 
 with col1:
     st.subheader("📊 Módulo Financiero en Vivo")
     try:
-        # Consulta rápida de precios de criptoactivos (USDT / BTC / ETH)
         url = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether&vs_currencies=usd,clp"
         response = requests.get(url, timeout=3)
         if response.status_code == 200:
@@ -48,10 +50,33 @@ with col2:
 
 st.divider()
 
-# Consola Central
-st.subheader("Consola Central")
-user_input = st.text_input("Escriba su mensaje y presione Enter...")
+# Consola Central de Chat con Gemini
+st.subheader("Consola Central de Operaciones")
 
-if user_input:
-    puente.registrar_transmision("NOVA", user_input)
-    st.success(f"N.O.V.A. procesó la orden: '{user_input}' con enlace dual activo.")
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
+
+if prompt := st.chat_input("Ingrese comando o consulta para N.O.V.A..."):
+    st.session_state.messages.append({"role": "user", "content": prompt})
+    with st.chat_message("user"):
+        st.markdown(prompt)
+
+    # Registrar en el puente dual
+    puente.registrar_transmision("NOVA", prompt)
+
+    with st.chat_message("assistant"):
+        try:
+            response = client.models.generate_content(
+                model='gemini-2.5-flash',
+                contents=prompt,
+            )
+            reply = response.text
+        except Exception as e:
+            reply = f"Error en el motor táctico de IA: {e}"
+        
+        st.markdown(reply)
+        st.session_state.messages.append({"role": "assistant", "content": reply})
