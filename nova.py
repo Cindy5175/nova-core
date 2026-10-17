@@ -1,5 +1,6 @@
 import streamlit as st
 import requests
+import streamlit.components.v1 as components
 from datetime import datetime
 from puente_jarvis_nova import PuenteTactico
 
@@ -42,12 +43,28 @@ with st.sidebar:
     st.markdown("— *Modo Dual Activo* —")
     st.divider()
     
-    # Módulo de Fecha y Hora en tiempo real
+    # Reloj Táctico en vivo con segundero corriendo
     now = datetime.now()
-    fecha_actual = now.strftime("%d/%m/%Y")
-    hora_actual = now.strftime("%H:%M:%S")
-    st.markdown(f"📅 **Fecha:** {fecha_actual}")
-    st.markdown(f"⏰ **Hora:** {hora_actual}")
+    st.markdown(f"📅 **Fecha:** {now.strftime('%d/%m/%Y')}")
+    st.markdown("⏰ **Hora Táctica (En vivo):**")
+    
+    reloj_html = """
+    <div style="background-color: #161b22; color: #00ff66; font-family: monospace; padding: 8px; border-radius: 4px; border: 1px solid #00ff66; text-align: center; margin-bottom: 10px;">
+        <div id="clock" style="font-size: 20px; font-weight: bold; color: #00ff66; letter-spacing: 2px;">00:00:00</div>
+    </div>
+    <script>
+    function updateClock() {
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        document.getElementById('clock').innerText = hours + ':' + minutes + ':' + seconds;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+    </script>
+    """
+    components.html(reloj_html, height=55)
     st.divider()
 
     # Módulo Financiero compacto
@@ -102,11 +119,9 @@ if "messages" not in st.session_state:
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
-        # Si el mensaje incluye audio adjunto de respuesta, reproducirlo
         if "audio" in message and message["audio"]:
             st.audio(message["audio"], format="audio/mp3")
 
-# Entrada de texto normal por chat
 prompt = st.chat_input("Ingrese comando, consulta o hable con N.O.V.A...")
 
 if prompt:
@@ -118,10 +133,13 @@ if prompt:
 
     with st.chat_message("assistant"):
         p_lower = prompt.lower()
+        hora_actual_str = datetime.now().strftime("%H:%M:%S")
+        fecha_actual_str = datetime.now().strftime("%d/%m/%Y")
+        
         if "hola" in p_lower:
-            reply = f"¡Saludos, Jefa! Son las {hora_actual} del {fecha_actual}. N.O.V.A. en línea y operando con enlace de voz y texto. ¿Qué órdenes tenemos?"
+            reply = f"¡Saludos, Jefa! Son las {hora_actual_str} del {fecha_actual_str}. N.O.V.A. en línea y operando con el segundero activo. ¿Qué órdenes tenemos?"
         elif "hora" in p_lower or "fecha" in p_lower:
-            reply = f"Información temporal del sistema: Hoy es {fecha_actual} y son exactamente las {hora_actual}."
+            reply = f"Información temporal del sistema: Hoy es {fecha_actual_str} y el reloj marca las {hora_actual_str}."
         elif "bitcoin" in p_lower or "btc" in p_lower or "precio" in p_lower:
             reply = "Los módulos financieros están enlazados en tiempo real en la barra lateral izquierda."
         elif "jarvis" in p_lower or "viernes" in p_lower:
@@ -133,10 +151,8 @@ if prompt:
         
         st.markdown(reply)
         
-        # Generar síntesis de voz automática para contestar en ambas formas (Texto y Audio)
         try:
             from gtts import gTTS
-            import os
             tts = gTTS(text=reply, lang='es')
             audio_path = "respuesta_nova.mp3"
             tts.save(audio_path)
