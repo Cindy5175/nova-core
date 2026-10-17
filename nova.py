@@ -1,11 +1,10 @@
 import streamlit as st
 import requests
-from google import genai
 from puente_jarvis_nova import PuenteTactico
 
-# Inicializar el puente dual y cliente de Gemini con una API Key válida de Google AI Studio (ej. AIza...)
+# Inicializar el puente dual
 puente = PuenteTactico()
-client = genai.Client(api_key="AQ.Ab8RN6JrkHX_Qfqyas6PskPgyzhJiKj6E-wuy62AJdUh9OQAhg")
+API_KEY = "AQ.Ab8RN6JrkHX_Qfqyas6PskPgyzhJiKj6E-wuy62AJdUh9OQAhg"
 
 st.set_page_config(page_title="N.O.V.A. - Núcleo Táctico", page_icon="🟢", layout="wide")
 
@@ -42,10 +41,10 @@ with st.sidebar:
     
     st.subheader("📊 Módulo Financiero")
     try:
-        url = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether&vs_currencies=usd,clp"
-        response = requests.get(url, timeout=3)
-        if response.status_code == 200:
-            precios = response.json()
+        url_crypto = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether&vs_currencies=usd,clp"
+        response_crypto = requests.get(url_crypto, timeout=3)
+        if response_crypto.status_code == 200:
+            precios = response_crypto.json()
             st.metric("BTC", f"${precios.get('bitcoin', {}).get('usd', 0):,} USD")
             st.metric("ETH", f"${precios.get('ethereum', {}).get('usd', 0):,} USD")
             st.metric("USDT", f"${precios.get('tether', {}).get('clp', 0)} CLP")
@@ -63,7 +62,7 @@ with st.sidebar:
     else:
         st.caption("Sin transmisiones recientes.")
 
-# Consola Central de Operaciones principal (arriba y con todo el espacio)
+# Consola Central de Operaciones principal
 st.title("🟢 N.O.V.A. // Consola Central de Operaciones")
 
 if "messages" not in st.session_state:
@@ -83,11 +82,18 @@ if prompt := st.chat_input("Ingrese comando o consulta para N.O.V.A..."):
 
     with st.chat_message("assistant"):
         try:
-            response = client.models.generate_content(
-                model='gemini-2.0-flash',
-                contents=prompt,
-            )
-            reply = response.text
+            # Petición HTTP directa al REST API de Gemini (Plan B robusto)
+            url_gemini = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={API_KEY}"
+            payload = {
+                "contents": [{"parts": [{"text": prompt}]}]
+            }
+            res = requests.post(url_gemini, json=payload, timeout=10)
+            
+            if res.status_code == 200:
+                data = res.json()
+                reply = data["candidates"][0]["content"]["parts"][0]["text"]
+            else:
+                reply = f"Error de conexión con el núcleo (Código {res.status_code}): {res.text}"
         except Exception as e:
             reply = f"Error en el motor táctico de IA: {e}"
         
