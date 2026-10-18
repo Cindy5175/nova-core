@@ -39,7 +39,7 @@ puente = PuenteTacticoUnificado()
 # --- CONFIGURACIÓN DE LA PÁGINA ---
 st.set_page_config(page_title="N.O.V.A. - Núcleo Táctico", page_icon="🌐", layout="wide")
 
-# Estilos visuales tácticos (Cyan neón) con centrado de cabecera
+# Estilos visuales tácticos (Cyan neón)
 st.markdown("""
     <style>
     .stApp {
@@ -52,7 +52,6 @@ st.markdown("""
         color: #00d9ff; 
     }
     
-    /* Centrar encabezados principales */
     h1 {
         font-size: 22px !important;
         color: #00d9ff !important;
@@ -215,7 +214,7 @@ with st.sidebar:
         st.session_state.messages = []
         st.rerun()
 
-# --- ÁREA PRINCIPAL CENTRADA ---
+# --- ÁREA PRINCIPAL ---
 st.title("🌐 N.O.V.A. // Núcleo Táctico Cuántico")
 
 # Núcleo de Plasma (Logo centrado)
@@ -258,7 +257,7 @@ nucleo_plasma_html = """
 """
 components.html(nucleo_plasma_html, height=180)
 
-# Disposición en 2 Columnas (Chat a la izquierda, Clima a la derecha)
+# Disposición en 2 Columnas (Chat a la izquierda, Clima + Diagnóstico a la derecha)
 col_izq, col_der = st.columns([2, 1])
 
 # --- COLUMNA IZQUIERDA: CONSOLA DE CHAT Y ACCESOS RÁPIDOS ---
@@ -307,7 +306,7 @@ with col_izq:
             reply = f"Comando '{prompt}' procesado, Jefa. Sistemas en alerta."
         
         try:
-            from gtts import gTTS
+            from gTTS import gTTS
             tts = gTTS(text=reply, lang='es')
             audio_path = "respuesta_nova.mp3"
             tts.save(audio_path)
@@ -324,7 +323,7 @@ with col_izq:
     with col_b:
         st.markdown('<a href="https://scribd.com" target="_blank" class="tactical-link">📚 Scribd</a>', unsafe_allow_html=True)
 
-# --- COLUMNA DERECHA: TELEMETRÍA CLIMÁTICA Y SEGURIDAD ---
+# --- COLUMNA DERECHA: TELEMETRÍA CLIMÁTICA Y DIAGNÓSTICO DE SISTEMAS ---
 with col_der:
     st.markdown("### 🌤️ Clima Buin")
     try:
@@ -343,6 +342,14 @@ with col_der:
             st.caption("Reconectando clima...")
     except Exception:
         st.caption("Clima no disponible")
+
+    st.divider()
+
+    # Nuevo Módulo de Diagnóstico de Sistemas en el espacio libre
+    st.markdown("### ⚡ Diagnóstico de Red")
+    st.metric("Red Cuántica", "Estable", "12ms")
+    st.metric("Enlace Satelital", "Activo", "100%")
+    st.metric("Cifrado", "AES-256", "OK")
 
     st.divider()
 
