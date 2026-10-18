@@ -39,7 +39,7 @@ puente = PuenteTacticoUnificado()
 # --- CONFIGURACIÓN DE LA PÁGINA ---
 st.set_page_config(page_title="N.O.V.A. - Núcleo Táctico", page_icon="🌐", layout="wide")
 
-# Estilos visuales tácticos (Cyan neón)
+# Estilos visuales tácticos (Cyan neón) con centrado de cabecera
 st.markdown("""
     <style>
     .stApp {
@@ -52,16 +52,19 @@ st.markdown("""
         color: #00d9ff; 
     }
     
+    /* Centrar encabezados principales */
     h1 {
         font-size: 22px !important;
         color: #00d9ff !important;
         font-weight: 800;
         letter-spacing: 2px;
         text-transform: uppercase;
+        text-align: center;
     }
     h2 {
         font-size: 18px !important;
         color: #00d9ff !important;
+        text-align: center;
     }
     h3 {
         font-size: 14px !important;
@@ -212,10 +215,10 @@ with st.sidebar:
         st.session_state.messages = []
         st.rerun()
 
-# --- ÁREA PRINCIPAL ---
+# --- ÁREA PRINCIPAL CENTRADA ---
 st.title("🌐 N.O.V.A. // Núcleo Táctico Cuántico")
 
-# Núcleo de Plasma
+# Núcleo de Plasma (Logo centrado)
 nucleo_plasma_html = """
 <div style="display: flex; justify-content: center; align-items: center; margin: 10px 0;">
     <svg viewBox="0 0 100 100" style="width: 170px; height: 170px;">
@@ -255,7 +258,7 @@ nucleo_plasma_html = """
 """
 components.html(nucleo_plasma_html, height=180)
 
-# Disposición en 2 Columnas (CHAT A LA IZQUIERDA, CLIMA A LA DERECHA)
+# Disposición en 2 Columnas (Chat a la izquierda, Clima a la derecha)
 col_izq, col_der = st.columns([2, 1])
 
 # --- COLUMNA IZQUIERDA: CONSOLA DE CHAT Y ACCESOS RÁPIDOS ---
