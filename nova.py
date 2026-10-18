@@ -3,9 +3,10 @@ import requests
 import pandas as pd
 from datetime import datetime, timezone, timedelta
 import streamlit.components.v1 as components
+import string
+import random
 
-# Configuración de la zona horaria de Chile (UTC-4 / UTC-3 según corresponda)
-# Para evitar dependencias externas, definimos UTC-3 (horario de verano / actual de Chile)
+# Configuración de la zona horaria de Chile (UTC-3)
 CHILE_TZ = timezone(timedelta(hours=-3))
 
 # --- CLASE INTERNA DE ENLACE TÁCTICO ---
@@ -104,6 +105,28 @@ st.markdown("""
     [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] {
         color: #aae0ff;
     }
+
+    /* Enlaces estilizados como botones tácticos */
+    .tactical-link {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0;
+        background-color: #0d1117;
+        color: #00d9ff !important;
+        text-align: center;
+        text-decoration: none;
+        border: 1px solid #00d9ff66;
+        border-radius: 4px;
+        font-weight: bold;
+        font-size: 13px;
+        transition: 0.3s;
+    }
+    .tactical-link:hover {
+        background-color: #00d9ff22;
+        border-color: #00ffff;
+        box-shadow: 0 0 10px #00d9ff44;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -192,8 +215,8 @@ st.title("🌐 N.O.V.A. // Núcleo Táctico Cuántico")
 st.markdown("— *Interfaz IA Avanzada • Protocolo Cyan Activado* —")
 
 nucleo_plasma_html = """
-<div style="display: flex; justify-content: center; align-items: center; margin: 30px 0;">
-    <svg viewBox="0 0 100 100" style="width: 250px; height: 250px;">
+<div style="display: flex; justify-content: center; align-items: center; margin: 20px 0;">
+    <svg viewBox="0 0 100 100" style="width: 230px; height: 230px;">
         <defs>
             <filter id="glow">
                 <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
@@ -228,7 +251,53 @@ nucleo_plasma_html = """
     </svg>
 </div>
 """
-components.html(nucleo_plasma_html, height=260)
+components.html(nucleo_plasma_html, height=240)
+
+# --- MÓDULOS DIVIDIDOS EN 2 COLUMNAS (IZQUIERDA / DERECHA) ---
+col_izq, col_der = st.columns(2)
+
+# --- COLUMNA IZQUIERDA: MÓDULO 1 (CLIMA) & MÓDULO 3 (CIFRADO) ---
+with col_izq:
+    st.markdown("### 🌤️ Telemetría Climática (Buin)")
+    try:
+        url_clima = "https://api.open-meteo.com/v1/forecast?latitude=-33.7331&longitude=-70.7423&current=temperature_2m,relative_humidity_2m,wind_speed_10m&timezone=auto"
+        res_clima = requests.get(url_clima, timeout=3)
+        if res_clima.status_code == 200:
+            data_clima = res_clima.json().get("current", {})
+            temp = data_clima.get("temperature_2m", "--")
+            hum = data_clima.get("relative_humidity_2m", "--")
+            viento = data_clima.get("wind_speed_10m", "--")
+            
+            c1, c2, c3 = st.columns(3)
+            c1.metric("Temperatura", f"{temp} °C")
+            c2.metric("Humedad", f"{hum} %")
+            c3.metric("Viento", f"{viento} km/h")
+        else:
+            st.info("Sensores de clima reconectando...")
+    except Exception:
+        st.warning("Clima atmosférico: Fuera de alcance")
+
+    st.divider()
+
+    st.markdown("### 🔐 Generador de Cifrado Cuántico")
+    longitud = st.slider("Longitud de clave", min_value=8, max_value=32, value=16)
+    if st.button("Generar Clave Segura", use_container_width=True):
+        caracteres = string.ascii_letters + string.digits + "!@#$%^&*()_+"
+        clave_gen = ''.join(random.choice(caracteres) for _ in range(longitud))
+        st.code(clave_gen, language="")
+
+# --- COLUMNA DERECHA: MÓDULO 4 (ACCESOS DIRECTOS / ENLACES) ---
+with col_der:
+    st.markdown("### 🔗 Matriz de Enlaces Rápidos")
+    st.caption("Accesos directos autorizados a plataformas externas")
+    
+    st.markdown('<a href="https://buda.com" target="_blank" class="tactical-link">⚡ Buda.com (Cripto Chile)</a>', unsafe_allow_html=True)
+    st.markdown('<a href="https://crypto.com" target="_blank" class="tactical-link">🪙 Crypto.com Exchange</a>', unsafe_allow_html=True)
+    st.markdown('<a href="https://fintual.cl" target="_blank" class="tactical-link">📈 Fintual (Inversiones)</a>', unsafe_allow_html=True)
+    st.markdown('<a href="https://interactivebrokers.com" target="_blank" class="tactical-link">🌐 Interactive Brokers</a>', unsafe_allow_html=True)
+    st.markdown('<a href="https://scribd.com" target="_blank" class="tactical-link">📚 Scribd (Biblioteca)</a>', unsafe_allow_html=True)
+
+st.divider()
 
 # --- ÁREA DE CHAT ---
 if "messages" not in st.session_state:
@@ -280,7 +349,7 @@ if prompt:
         st.markdown(reply)
         
         try:
-            from gTTS import gTTS
+            from gtts import gTTS
             tts = gTTS(text=reply, lang='es')
             audio_path = "respuesta_nova.mp3"
             tts.save(audio_path)
