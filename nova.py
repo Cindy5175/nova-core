@@ -39,7 +39,7 @@ puente = PuenteTacticoUnificado()
 # --- CONFIGURACIÓN DE LA PÁGINA ---
 st.set_page_config(page_title="N.O.V.A. - Núcleo Táctico", page_icon="🌐", layout="wide")
 
-# Estilos visuales tácticos (Cyan neón) con tipografía reducida
+# Estilos visuales tácticos (Cyan neón)
 st.markdown("""
     <style>
     .stApp {
@@ -52,7 +52,6 @@ st.markdown("""
         color: #00d9ff; 
     }
     
-    /* Reducción de tamaños de encabezados */
     h1 {
         font-size: 22px !important;
         color: #00d9ff !important;
@@ -127,7 +126,6 @@ st.markdown("""
         font-size: 13px;
     }
 
-    /* Enlaces compactos tácticos */
     .tactical-link {
         display: block;
         width: 100%;
@@ -214,10 +212,10 @@ with st.sidebar:
         st.session_state.messages = []
         st.rerun()
 
-# --- ÁREA PRINCIPAL EN 3 COLUMNAS ---
+# --- ÁREA PRINCIPAL ---
 st.title("🌐 N.O.V.A. // Núcleo Táctico Cuántico")
 
-# Núcleo de Plasma Integrado
+# Núcleo de Plasma
 nucleo_plasma_html = """
 <div style="display: flex; justify-content: center; align-items: center; margin: 10px 0;">
     <svg viewBox="0 0 100 100" style="width: 170px; height: 170px;">
@@ -257,10 +255,10 @@ nucleo_plasma_html = """
 """
 components.html(nucleo_plasma_html, height=180)
 
-# Disposición en 3 columnas: Izquierda (Clima), Centro (CHAT PRIORITARIO), Derecha (Bóveda/Enlaces)
-col_izq, col_centro, col_der = st.columns([1, 2, 1])
+# Disposición balanceada de 2 Columnas
+col_izq, col_der = st.columns([1, 2])
 
-# --- COLUMNA IZQUIERDA: TELEMETRÍA CLIMÁTICA ---
+# --- COLUMNA IZQUIERDA: TELEMETRÍA CLIMÁTICA Y SEGURIDAD ---
 with col_izq:
     st.markdown("### 🌤️ Clima Buin")
     try:
@@ -280,14 +278,23 @@ with col_izq:
     except Exception:
         st.caption("Clima no disponible")
 
-# --- COLUMNA CENTRAL: ÁREA DE CHAT (PRIORIDAD) ---
-with col_centro:
+    st.divider()
+
+    st.markdown("### 🔐 Cifrado Cuántico")
+    longitud = st.slider("Longitud", min_value=8, max_value=24, value=12)
+    if st.button("Generar Clave", use_container_width=True):
+        caracteres = string.ascii_letters + string.digits + "!@#$"
+        clave_gen = ''.join(random.choice(caracteres) for _ in range(longitud))
+        st.code(clave_gen, language="")
+
+# --- COLUMNA DERECHA: CONSOLA DE CHAT CENTRADA ---
+with col_der:
     st.markdown("### 💬 Consola de Mando")
     
     if "messages" not in st.session_state:
         st.session_state.messages = []
 
-    # Contenedor con altura limitada para mantener el chat acortado y centrado
+    # Contenedor de chat ajustado
     with st.container(height=320):
         for message in st.session_state.messages:
             with st.chat_message(message["role"]):
@@ -335,16 +342,10 @@ with col_centro:
             st.session_state.messages.append({"role": "assistant", "content": reply})
         st.rerun()
 
-# --- COLUMNA DERECHA: CIFRADO Y ACCESOS RÁPIDOS ---
-with col_der:
-    st.markdown("### 🔐 Cifrado Cuántico")
-    longitud = st.slider("Longitud", min_value=8, max_value=24, value=12)
-    if st.button("Generar Clave", use_container_width=True):
-        caracteres = string.ascii_letters + string.digits + "!@#$"
-        clave_gen = ''.join(random.choice(caracteres) for _ in range(longitud))
-        st.code(clave_gen, language="")
-
+    st.divider()
     st.markdown("### 🔗 Accesos Rápidos")
-    st.markdown('<a href="https://crypto.com" target="_blank" class="tactical-link">🪙 Crypto.com</a>', unsafe_allow_html=True)
-    st.markdown('<a href="https://fintual.cl" target="_blank" class="tactical-link">📈 Fintual</a>', unsafe_allow_html=True)
-    st.markdown('<a href="https://scribd.com" target="_blank" class="tactical-link">📚 Scribd</a>', unsafe_allow_html=True)
+    col_a, col_b = st.columns(2)
+    with col_a:
+        st.markdown('<a href="https://fintual.cl" target="_blank" class="tactical-link">📈 Fintual</a>', unsafe_allow_html=True)
+    with col_b:
+        st.markdown('<a href="https://scribd.com" target="_blank" class="tactical-link">📚 Scribd</a>', unsafe_allow_html=True)
