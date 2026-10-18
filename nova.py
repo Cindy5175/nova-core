@@ -1,25 +1,25 @@
 import streamlit as st
 import requests
 import pandas as pd
-from datetime import datetime
-import pytz
+from datetime import datetime, timezone, timedelta
 import streamlit.components.v1 as components
 
-# Zona horaria de Chile para sincronización precisa
-TZ_CHILE = pytz.timezone("America/Santiago")
+# Configuración de la zona horaria de Chile (UTC-4 / UTC-3 según corresponda)
+# Para evitar dependencias externas, definimos UTC-3 (horario de verano / actual de Chile)
+CHILE_TZ = timezone(timedelta(hours=-3))
 
 # --- CLASE INTERNA DE ENLACE TÁCTICO ---
 class PuenteTacticoUnificado:
     def __init__(self):
         if "telemetria_jarvis" not in st.session_state:
-            ahora_cl = datetime.now(TZ_CHILE)
+            ahora_cl = datetime.now(CHILE_TZ)
             st.session_state.telemetria_jarvis = [
                 {"origen": "JARVIS", "timestamp": ahora_cl.strftime("%Y-%m-%d %H:%M:%S"), "mensaje": "Núcleo de plasma N.O.V.A. estabilizado."},
                 {"origen": "VIERNES", "timestamp": ahora_cl.strftime("%Y-%m-%d %H:%M:%S"), "mensaje": "Sensores cuánticos en línea."}
             ]
 
     def registrar_transmision(self, origen, mensaje):
-        ahora_cl = datetime.now(TZ_CHILE)
+        ahora_cl = datetime.now(CHILE_TZ)
         nuevo_registro = {
             "origen": origen,
             "timestamp": ahora_cl.strftime("%Y-%m-%d %H:%M:%S"),
@@ -114,7 +114,7 @@ with st.sidebar:
     st.divider()
     
     # Módulo Reloj Táctico en Vivo
-    ahora_local = datetime.now(TZ_CHILE)
+    ahora_local = datetime.now(CHILE_TZ)
     st.markdown(f"📅 **Fecha:** {ahora_local.strftime('%d/%m/%Y')}")
     st.markdown("⏰ **Hora Táctica (Local):**")
     
@@ -250,13 +250,13 @@ if prompt:
     puente.registrar_transmision("NOVA", prompt)
 
     with st.chat_message("assistant"):
-        ahora = datetime.now(TZ_CHILE)
+        ahora = datetime.now(CHILE_TZ)
         hora_num = ahora.hour
         hora_actual_str = ahora.strftime("%H:%M:%S")
         fecha_actual_str = ahora.strftime("%d/%m/%Y")
         p_lower = prompt.lower()
         
-        # Saludo dinámico según la hora local de Chile
+        # Saludo dinámico según la hora local
         if 5 <= hora_num < 12:
             saludo = "Buenos días"
         elif 12 <= hora_num < 20:
@@ -280,7 +280,7 @@ if prompt:
         st.markdown(reply)
         
         try:
-            from gtts import gTTS
+            from gTTS import gTTS
             tts = gTTS(text=reply, lang='es')
             audio_path = "respuesta_nova.mp3"
             tts.save(audio_path)
