@@ -203,7 +203,7 @@ with st.sidebar:
         else:
             st.caption("Sin transmisiones.")
 
-    # Módulo Satelital V.I.E.R.N.E.S.
+    # 1. Satélite / Mapa arriba en el sidebar
     with st.expander("🛰️ Satélite V.I.E.R.N.E.S.", expanded=True):
         st.caption("Buin, Chile")
         map_data = pd.DataFrame(
@@ -211,6 +211,20 @@ with st.sidebar:
             columns=['lat', 'lon']
         )
         st.map(map_data, zoom=10, use_container_width=True, height=120)
+
+    # 2. Monitor Global justo debajo del mapa
+    with st.expander("🌍 Monitor Global", expanded=True):
+        monitor_svg = """
+        <div style="background-color: #0d1117; display: flex; justify-content: center; align-items: center; padding: 5px; border-radius: 4px;">
+            <svg viewBox="0 0 100 60" style="width: 100%; height: 75px;">
+                <circle cx="50" cy="30" r="25" fill="none" stroke="#00d9ff44" stroke-width="1" stroke-dasharray="2 2"/>
+                <path d="M 35 25 Q 50 15 65 25 Q 60 40 50 45 Q 40 40 35 25" fill="#00d9ff22" stroke="#00d9ff" stroke-width="0.8"/>
+                <circle cx="50" cy="30" r="2" fill="#00ffff"/>
+            </svg>
+        </div>
+        """
+        components.html(monitor_svg, height=85)
+        st.caption("Estado de red orbital: Estable")
 
     st.divider()
     
@@ -262,7 +276,7 @@ nucleo_plasma_html = """
 """
 components.html(nucleo_plasma_html, height=180)
 
-# Disposición en 2 Columnas (Chat a la izquierda, Clima + Diagnóstico a la derecha)
+# Disposición en 2 Columnas (Chat a la izquierda, Clima/Diagnóstico/Cifrado a la derecha)
 col_izq, col_der = st.columns([2, 1])
 
 # --- COLUMNA IZQUIERDA: CONSOLA DE CHAT Y ACCESOS RÁPIDOS ---
@@ -331,34 +345,37 @@ with col_izq:
     with col_b:
         st.markdown('<a href="https://scribd.com" target="_blank" class="tactical-link">📚 Scribd</a>', unsafe_allow_html=True)
 
-# --- COLUMNA DERECHA: TELEMETRÍA, DIAGNÓSTICO Y CIFRADO ---
+# --- COLUMNA DERECHA: CLIMA, DIAGNÓSTICO Y CIFRADO ---
 with col_der:
     st.markdown('<div class="right-panel">', unsafe_allow_html=True)
     
-    st.markdown("### 🌤️ Clima Buin")
-    try:
-        url_clima = "https://api.open-meteo.com/v1/forecast?latitude=-33.7331&longitude=-70.7423&current=temperature_2m,relative_humidity_2m,wind_speed_10m&timezone=auto"
-        res_clima = requests.get(url_clima, timeout=3)
-        if res_clima.status_code == 200:
-            data_clima = res_clima.json().get("current", {})
-            temp = data_clima.get("temperature_2m", "--")
-            hum = data_clima.get("relative_humidity_2m", "--")
-            viento = data_clima.get("wind_speed_10m", "--")
-            
-            st.metric("Temperatura", f"{temp} °C")
-            st.metric("Humedad", f"{hum} %")
-            st.metric("Viento", f"{viento} km/h")
-        else:
-            st.caption("Reconectando clima...")
-    except Exception:
-        st.caption("Clima no disponible")
+    # Clima y Diagnóstico de Red distribuidos en dos sub-columnas para optimizar espacio
+    c_clima, c_diag = st.columns(2)
+    
+    with c_clima:
+        st.markdown("### 🌤️ Clima Buin")
+        try:
+            url_clima = "https://api.open-meteo.com/v1/forecast?latitude=-33.7331&longitude=-70.7423&current=temperature_2m,relative_humidity_2m,wind_speed_10m&timezone=auto"
+            res_clima = requests.get(url_clima, timeout=3)
+            if res_clima.status_code == 200:
+                data_clima = res_clima.json().get("current", {})
+                temp = data_clima.get("temperature_2m", "--")
+                hum = data_clima.get("relative_humidity_2m", "--")
+                viento = data_clima.get("wind_speed_10m", "--")
+                
+                st.metric("Temp", f"{temp}°C")
+                st.metric("Humedad", f"{hum}%")
+                st.metric("Viento", f"{viento}km/h")
+            else:
+                st.caption("Reconectando...")
+        except Exception:
+            st.caption("No disponible")
 
-    st.divider()
-
-    st.markdown("### ⚡ Diagnóstico de Red")
-    st.metric("Red Cuántica", "Estable", "12ms")
-    st.metric("Enlace Satelital", "Activo", "100%")
-    st.metric("Cifrado", "AES-256", "OK")
+    with c_diag:
+        st.markdown("### ⚡ Red")
+        st.metric("Cuántica", "Estable", "12ms")
+        st.metric("Satélite", "Activo", "100%")
+        st.metric("Cifrado", "AES-256", "OK")
 
     st.divider()
 
