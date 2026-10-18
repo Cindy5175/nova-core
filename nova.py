@@ -255,40 +255,11 @@ nucleo_plasma_html = """
 """
 components.html(nucleo_plasma_html, height=180)
 
-# Disposición balanceada de 2 Columnas
-col_izq, col_der = st.columns([1, 2])
+# Disposición en 2 Columnas (CHAT A LA IZQUIERDA, CLIMA A LA DERECHA)
+col_izq, col_der = st.columns([2, 1])
 
-# --- COLUMNA IZQUIERDA: TELEMETRÍA CLIMÁTICA Y SEGURIDAD ---
+# --- COLUMNA IZQUIERDA: CONSOLA DE CHAT Y ACCESOS RÁPIDOS ---
 with col_izq:
-    st.markdown("### 🌤️ Clima Buin")
-    try:
-        url_clima = "https://api.open-meteo.com/v1/forecast?latitude=-33.7331&longitude=-70.7423&current=temperature_2m,relative_humidity_2m,wind_speed_10m&timezone=auto"
-        res_clima = requests.get(url_clima, timeout=3)
-        if res_clima.status_code == 200:
-            data_clima = res_clima.json().get("current", {})
-            temp = data_clima.get("temperature_2m", "--")
-            hum = data_clima.get("relative_humidity_2m", "--")
-            viento = data_clima.get("wind_speed_10m", "--")
-            
-            st.metric("Temperatura", f"{temp} °C")
-            st.metric("Humedad", f"{hum} %")
-            st.metric("Viento", f"{viento} km/h")
-        else:
-            st.caption("Reconectando clima...")
-    except Exception:
-        st.caption("Clima no disponible")
-
-    st.divider()
-
-    st.markdown("### 🔐 Cifrado Cuántico")
-    longitud = st.slider("Longitud", min_value=8, max_value=24, value=12)
-    if st.button("Generar Clave", use_container_width=True):
-        caracteres = string.ascii_letters + string.digits + "!@#$"
-        clave_gen = ''.join(random.choice(caracteres) for _ in range(longitud))
-        st.code(clave_gen, language="")
-
-# --- COLUMNA DERECHA: CONSOLA DE CHAT CENTRADA ---
-with col_der:
     st.markdown("### 💬 Consola de Mando")
     
     if "messages" not in st.session_state:
@@ -349,3 +320,32 @@ with col_der:
         st.markdown('<a href="https://fintual.cl" target="_blank" class="tactical-link">📈 Fintual</a>', unsafe_allow_html=True)
     with col_b:
         st.markdown('<a href="https://scribd.com" target="_blank" class="tactical-link">📚 Scribd</a>', unsafe_allow_html=True)
+
+# --- COLUMNA DERECHA: TELEMETRÍA CLIMÁTICA Y SEGURIDAD ---
+with col_der:
+    st.markdown("### 🌤️ Clima Buin")
+    try:
+        url_clima = "https://api.open-meteo.com/v1/forecast?latitude=-33.7331&longitude=-70.7423&current=temperature_2m,relative_humidity_2m,wind_speed_10m&timezone=auto"
+        res_clima = requests.get(url_clima, timeout=3)
+        if res_clima.status_code == 200:
+            data_clima = res_clima.json().get("current", {})
+            temp = data_clima.get("temperature_2m", "--")
+            hum = data_clima.get("relative_humidity_2m", "--")
+            viento = data_clima.get("wind_speed_10m", "--")
+            
+            st.metric("Temperatura", f"{temp} °C")
+            st.metric("Humedad", f"{hum} %")
+            st.metric("Viento", f"{viento} km/h")
+        else:
+            st.caption("Reconectando clima...")
+    except Exception:
+        st.caption("Clima no disponible")
+
+    st.divider()
+
+    st.markdown("### 🔐 Cifrado Cuántico")
+    longitud = st.slider("Longitud", min_value=8, max_value=24, value=12)
+    if st.button("Generar Clave", use_container_width=True):
+        caracteres = string.ascii_letters + string.digits + "!@#$"
+        clave_gen = ''.join(random.choice(caracteres) for _ in range(longitud))
+        st.code(clave_gen, language="")
