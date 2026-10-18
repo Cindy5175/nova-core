@@ -39,7 +39,7 @@ puente = PuenteTacticoUnificado()
 # --- CONFIGURACIÓN DE LA PÁGINA ---
 st.set_page_config(page_title="N.O.V.A. - Núcleo Táctico", page_icon="🌐", layout="wide")
 
-# Estilos visuales tácticos (Cyan neón)
+# Estilos visuales tácticos (Cyan neón) con alineación derecha optimizada
 st.markdown("""
     <style>
     .stApp {
@@ -146,6 +146,12 @@ st.markdown("""
     .tactical-link:hover {
         background-color: #00d9ff22;
         border-color: #00ffff;
+    }
+
+    /* Contenedor derecho estilizado para empujar a la derecha */
+    .right-panel {
+        padding-left: 10px;
+        border-left: 1px solid #00d9ff22;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -323,8 +329,10 @@ with col_izq:
     with col_b:
         st.markdown('<a href="https://scribd.com" target="_blank" class="tactical-link">📚 Scribd</a>', unsafe_allow_html=True)
 
-# --- COLUMNA DERECHA: TELEMETRÍA CLIMÁTICA Y DIAGNÓSTICO DE SISTEMAS ---
+# --- COLUMNA DERECHA: TELEMETRÍA, DIAGNÓSTICO Y CIFRADO (OPTIMIZADO A LA DERECHA) ---
 with col_der:
+    st.markdown('<div class="right-panel">', unsafe_allow_html=True)
+    
     st.markdown("### 🌤️ Clima Buin")
     try:
         url_clima = "https://api.open-meteo.com/v1/forecast?latitude=-33.7331&longitude=-70.7423&current=temperature_2m,relative_humidity_2m,wind_speed_10m&timezone=auto"
@@ -345,7 +353,6 @@ with col_der:
 
     st.divider()
 
-    # Nuevo Módulo de Diagnóstico de Sistemas en el espacio libre
     st.markdown("### ⚡ Diagnóstico de Red")
     st.metric("Red Cuántica", "Estable", "12ms")
     st.metric("Enlace Satelital", "Activo", "100%")
@@ -359,3 +366,5 @@ with col_der:
         caracteres = string.ascii_letters + string.digits + "!@#$"
         clave_gen = ''.join(random.choice(caracteres) for _ in range(longitud))
         st.code(clave_gen, language="")
+        
+    st.markdown('</div>', unsafe_allow_html=True)
