@@ -265,83 +265,22 @@ components.html(nucleo_plasma_html, height=180)
 # Disposición en 2 Columnas (Chat a la izquierda, Clima + Diagnóstico a la derecha)
 col_izq, col_der = st.columns([2, 1])
 
-# --- CAPTURA DE VOZ DESDE EL NAVEGADOR (QUERY PARAMS) ---
-params = st.query_params
-prompt_voz = params.get("voz", None)
-if prompt_voz:
-    # Limpiamos el parámetro para que no se ejecute en bucle
-    st.query_params.clear()
-    prompt = prompt_voz
-else:
-    prompt = None
-
 # --- COLUMNA IZQUIERDA: CONSOLA DE CHAT Y ACCESOS RÁPIDOS ---
 with col_izq:
     st.markdown("### 💬 Consola de Mando")
     
-    # Módulo de Botón de Micrófono de Voz en Vivo (JavaScript SpeechRecognition)
-    mic_html = """
-    <div style="background-color: #0d1117; padding: 10px; border-radius: 6px; border: 1px solid #00d9ff44; text-align: center; margin-bottom: 10px;">
-        <button id="mic-btn" onclick="startListening()" style="background-color: transparent; color: #00d9ff; border: 1px solid #00d9ff; padding: 6px 14px; font-family: 'Space Mono', monospace; font-weight: bold; border-radius: 4px; cursor: pointer; text-transform: uppercase; font-size: 11px;">
-            🎙️ Activar Micrófono (Hablar)
-        </button>
-        <span id="mic-status" style="display: block; margin-top: 6px; font-size: 11px; color: #aae0ff;">Micrófono en espera...</span>
-    </div>
-    <script>
-    function startListening() {
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if (!SpeechRecognition) {
-            alert("Tu navegador no soporta reconocimiento de voz. Usa Google Chrome.");
-            return;
-        }
-        const recognition = new SpeechRecognition();
-        recognition.lang = 'es-CL';
-        recognition.interimResults = false;
-        recognition.maxAlternatives = 1;
-
-        const statusEl = document.getElementById('mic-status');
-        statusEl.innerText = "Escuchando... Hable ahora.";
-
-        recognition.onresult = function(event) {
-            const speechResult = event.results[0][0].transcript;
-            statusEl.innerText = "Transcrito: " + speechResult;
-            // Recarga la app de Streamlit enviando el comando por la URL
-            const currentUrl = window.parent.location.href.split('?')[0];
-            window.parent.location.href = currentUrl + "?voz=" + encodeURIComponent(speechResult);
-        };
-
-        recognition.onerror = function(event) {
-            statusEl.innerText = "Error en el micrófono: " + event.error;
-        };
-
-        recognition.onend = function() {
-            if(statusEl.innerText.includes("Escuchando")) {
-                statusEl.innerText = "Micrófono en espera...";
-            }
-        };
-
-        recognition.start();
-    }
-    </script>
-    """
-    components.html(mic_html, height=95)
-
     if "messages" not in st.session_state:
         st.session_state.messages = []
 
     # Contenedor de chat ajustado
-    with st.container(height=280):
+    with st.container(height=340):
         for message in st.session_state.messages:
             with st.chat_message(message["role"]):
                 st.markdown(message["content"])
                 if "audio" in message and message["audio"]:
                     st.audio(message["audio"], format="audio/mp3")
 
-    chat_input_prompt = st.chat_input("Comando para N.O.V.A...")
-    
-    # Determinar si el comando viene por chat escrito o por voz
-    if chat_input_prompt:
-        prompt = chat_input_prompt
+    prompt = st.chat_input("Comando para N.O.V.A...")
 
     if prompt:
         st.session_state.messages.append({"role": "user", "content": prompt})
