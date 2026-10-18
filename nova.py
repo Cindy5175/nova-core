@@ -39,7 +39,7 @@ puente = PuenteTacticoUnificado()
 # --- CONFIGURACIÓN DE LA PÁGINA ---
 st.set_page_config(page_title="N.O.V.A. - Núcleo Táctico", page_icon="🌐", layout="wide")
 
-# Estilos visuales tácticos (Cyan neón) con alineación derecha optimizada
+# Estilos visuales tácticos (Cyan neón)
 st.markdown("""
     <style>
     .stApp {
@@ -113,7 +113,7 @@ st.markdown("""
     .stButton > button:hover {
         background-color: #00d9ff11;
         border-color: #00ffff;
-        box-shadow: 0 0 10px #00d9ff44;
+        box-shadow: 0 0 15px #00d9ff44;
     }
     
     [data-testid="stChatMessage"] {
@@ -148,7 +148,6 @@ st.markdown("""
         border-color: #00ffff;
     }
 
-    /* Contenedor derecho estilizado para empujar a la derecha */
     .right-panel {
         padding-left: 10px;
         border-left: 1px solid #00d9ff22;
@@ -300,16 +299,19 @@ with col_izq:
         else:
             saludo = "Buenas noches"
         
-        if "hola" in p_lower:
+        # Respuestas inteligentes y personalizadas de N.O.V.A.
+        if "quien eres" in p_lower or "qué eres" in p_lower or "que eres" in p_lower or "quién eres" in p_lower:
+            reply = "Soy N.O.V.A., el Núcleo Táctico Cuántico e Interfaz de Inteligencia Artificial avanzada de esta base de operaciones. Opero bajo un protocolo de plasma cyan, sincronizada en tiempo real con el huso horario de Chile, telemetría atmosférica de Buin y sistemas de seguridad de grado militar. Mi propósito es gestionar flujos de datos, optimizar procesos y mantener los sistemas en alerta constante... aunque, conociendo a la Jefa, mi verdadero trabajo es soportar sus ocurrencias y evitar que el servidor colapse. ¿Qué orden ejecutamos hoy?"
+        elif "hola" in p_lower:
             reply = f"{saludo}, Jefa. Son exactamente las {hora_actual_str} del {fecha_actual_str}. El núcleo opera en sincronía. ¿Instrucciones?"
         elif "hora" in p_lower or "fecha" in p_lower:
-            reply = f"Confirmado: hoy es {fecha_actual_str} y la hora exacta en Buin es {hora_actual_str}."
+            reply = f"Confirmado, Jefa: hoy es {fecha_actual_str} y la hora exacta en su ubicación es {hora_actual_str}."
         elif "jarvis" in p_lower or "viernes" in p_lower:
-            reply = "Enlace activo. Telemetría estable."
+            reply = "Enlace activo con los sistemas de apoyo. Telemetría estable."
         elif "purga" in p_lower or "limpiar" in p_lower:
-            reply = "Ejecute la limpieza desde la barra lateral."
+            reply = "Módulo de purga preparado. Puede ejecutar la limpieza desde la barra lateral."
         else:
-            reply = f"Comando '{prompt}' procesado, Jefa. Sistemas en alerta."
+            reply = f"Comando '{prompt}' recibido y procesado, Jefa. Sistemas en alerta constante."
         
         try:
             from gTTS import gTTS
@@ -329,7 +331,7 @@ with col_izq:
     with col_b:
         st.markdown('<a href="https://scribd.com" target="_blank" class="tactical-link">📚 Scribd</a>', unsafe_allow_html=True)
 
-# --- COLUMNA DERECHA: TELEMETRÍA, DIAGNÓSTICO Y CIFRADO (OPTIMIZADO A LA DERECHA) ---
+# --- COLUMNA DERECHA: TELEMETRÍA, DIAGNÓSTICO Y CIFRADO ---
 with col_der:
     st.markdown('<div class="right-panel">', unsafe_allow_html=True)
     
