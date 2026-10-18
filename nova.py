@@ -39,7 +39,7 @@ puente = PuenteTacticoUnificado()
 # --- CONFIGURACIÓN DE LA PÁGINA ---
 st.set_page_config(page_title="N.O.V.A. - Núcleo Táctico", page_icon="🌐", layout="wide")
 
-# Estilos visuales tácticos (Cyan neón)
+# Estilos visuales tácticos (Cyan neón) con tipografía reducida
 st.markdown("""
     <style>
     .stApp {
@@ -52,80 +52,100 @@ st.markdown("""
         color: #00d9ff; 
     }
     
-    h1, h2, h3, h4, h5, h6 {
+    /* Reducción de tamaños de encabezados */
+    h1 {
+        font-size: 22px !important;
         color: #00d9ff !important;
         font-weight: 800;
         letter-spacing: 2px;
         text-transform: uppercase;
     }
+    h2 {
+        font-size: 18px !important;
+        color: #00d9ff !important;
+    }
+    h3 {
+        font-size: 14px !important;
+        color: #00d9ff !important;
+        letter-spacing: 1px;
+    }
     
     .stTextInput input, textarea { 
         background-color: #0d1117 !important; 
         color: #00d9ff !important; 
-        border: 2px solid #00d9ff !important; 
+        border: 1px solid #00d9ff !important; 
         border-radius: 4px;
-        box-shadow: 0 0 10px #00d9ff22;
+        font-size: 12px !important;
     }
     
     [data-testid="stMetricValue"] {
         color: #00d9ff !important;
+        font-size: 16px !important;
+    }
+    [data-testid="stMetricLabel"] {
+        font-size: 11px !important;
     }
     
     section[data-testid="stSidebar"] {
         background-color: #0d1117 !important;
-        border-right: 2px solid #00d9ff66;
+        border-right: 1px solid #00d9ff66;
     }
     section[data-testid="stSidebar"] .block-container {
         padding-top: 1rem;
     }
     
     hr {
-        border-color: #00d9ff66;
+        border-color: #00d9ff44;
+        margin: 10px 0;
     }
     
     .stButton > button {
         background-color: transparent;
         color: #00d9ff;
-        border: 2px solid #00d9ff;
+        border: 1px solid #00d9ff;
         font-weight: bold;
+        font-size: 11px;
         text-transform: uppercase;
         box-shadow: 0 0 5px #00d9ff22;
+        padding: 4px 8px;
     }
     .stButton > button:hover {
         background-color: #00d9ff11;
         border-color: #00ffff;
-        box-shadow: 0 0 15px #00d9ff44;
+        box-shadow: 0 0 10px #00d9ff44;
     }
     
     [data-testid="stChatMessage"] {
         background-color: #0d1117;
-        border: 1px solid #00d9ff44;
-        border-radius: 8px;
+        border: 1px solid #00d9ff33;
+        border-radius: 6px;
+        padding: 8px;
+        margin-bottom: 6px;
     }
     [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] {
         color: #aae0ff;
+        font-size: 13px;
     }
 
-    /* Enlaces estilizados como botones tácticos */
+    /* Enlaces compactos tácticos */
     .tactical-link {
         display: block;
         width: 100%;
-        padding: 10px;
-        margin: 5px 0;
+        padding: 6px;
+        margin: 4px 0;
         background-color: #0d1117;
         color: #00d9ff !important;
         text-align: center;
         text-decoration: none;
-        border: 1px solid #00d9ff66;
+        border: 1px solid #00d9ff44;
         border-radius: 4px;
         font-weight: bold;
-        font-size: 13px;
-        transition: 0.3s;
+        font-size: 11px;
+        transition: 0.2s;
     }
     .tactical-link:hover {
         background-color: #00d9ff22;
         border-color: #00ffff;
-        box-shadow: 0 0 10px #00d9ff44;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -133,7 +153,7 @@ st.markdown("""
 # --- PANEL LATERAL TÁCTICO (Sidebar) ---
 with st.sidebar:
     st.markdown("### 🌐 N.O.V.A. // Núcleo")
-    st.markdown("— *Interfaz Táctica* —")
+    st.caption("Interfaz Táctica")
     st.divider()
     
     # Módulo Reloj Táctico en Vivo
@@ -142,8 +162,8 @@ with st.sidebar:
     st.markdown("⏰ **Hora Táctica (Local):**")
     
     reloj_html = """
-    <div style="background-color: #0d1117; color: #00d9ff; font-family: 'Space Mono', monospace; padding: 10px; border-radius: 4px; border: 2px solid #00d9ff; text-align: center; margin-bottom: 10px; box-shadow: 0 0 10px #00d9ff33;">
-        <div id="clock" style="font-size: 22px; font-weight: bold; color: #00d9ff; letter-spacing: 3px;">00:00:00</div>
+    <div style="background-color: #0d1117; color: #00d9ff; font-family: 'Space Mono', monospace; padding: 6px; border-radius: 4px; border: 1px solid #00d9ff; text-align: center; margin-bottom: 8px;">
+        <div id="clock" style="font-size: 18px; font-weight: bold; color: #00d9ff; letter-spacing: 2px;">00:00:00</div>
     </div>
     <script>
     function updateClock() {
@@ -157,32 +177,17 @@ with st.sidebar:
     updateClock();
     </script>
     """
-    components.html(reloj_html, height=65)
+    components.html(reloj_html, height=55)
     st.divider()
 
     # Módulo de Estado del Núcleo
     with st.expander("📊 Estado del Núcleo", expanded=True):
         col1, col2 = st.columns(2)
         with col1:
-            st.metric("Temp. Plasma", "1.2 MK", "+0.1")
+            st.metric("Plasma", "1.2 MK")
         with col2:
-            st.metric("Sincronía", "99.8%", "+0.01")
-        st.caption("Estado: ESCUCHANDO (EN LÍNEA)")
-
-    # Módulo Financiero
-    with st.expander("📊 Mercados Globales (En Vivo)", expanded=False):
-        try:
-            url_crypto = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether&vs_currencies=usd,clp"
-            response_crypto = requests.get(url_crypto, timeout=3)
-            if response_crypto.status_code == 200:
-                precios = response_crypto.json()
-                st.metric("BTC", f"${precios.get('bitcoin', {}).get('usd', 0):,} USD")
-                st.metric("ETH", f"${precios.get('ethereum', {}).get('usd', 0):,} USD")
-                st.metric("USDT", f"${precios.get('tether', {}).get('clp', 0)} CLP")
-            else:
-                st.write("Cargando datos...")
-        except Exception:
-            st.write("Mercados: Fuera de línea")
+            st.metric("Sincronía", "99.8%")
+        st.caption("Estado: ONLINE")
 
     # Módulo Enlace JARVIS
     with st.expander("🔗 Enlace JARVIS", expanded=False):
@@ -195,28 +200,27 @@ with st.sidebar:
 
     # Módulo Satelital V.I.E.R.N.E.S.
     with st.expander("🛰️ Satélite V.I.E.R.N.E.S.", expanded=True):
-        st.caption("Ubicación: Buin, Chile")
+        st.caption("Buin, Chile")
         map_data = pd.DataFrame(
             [[-33.7331, -70.7423]],
             columns=['lat', 'lon']
         )
-        st.map(map_data, zoom=10, use_container_width=True, height=150)
+        st.map(map_data, zoom=10, use_container_width=True, height=120)
 
     st.divider()
     
     # Módulo de Purga
-    st.subheader("🧹 Bóveda")
-    if st.button("Ejecutar Purga de Chat", use_container_width=True):
+    if st.button("Purga de Chat", use_container_width=True):
         st.session_state.messages = []
         st.rerun()
 
-# --- ÁREA PRINCIPAL ---
+# --- ÁREA PRINCIPAL EN 3 COLUMNAS ---
 st.title("🌐 N.O.V.A. // Núcleo Táctico Cuántico")
-st.markdown("— *Interfaz IA Avanzada • Protocolo Cyan Activado* —")
 
+# Núcleo de Plasma Integrado
 nucleo_plasma_html = """
-<div style="display: flex; justify-content: center; align-items: center; margin: 20px 0;">
-    <svg viewBox="0 0 100 100" style="width: 230px; height: 230px;">
+<div style="display: flex; justify-content: center; align-items: center; margin: 10px 0;">
+    <svg viewBox="0 0 100 100" style="width: 170px; height: 170px;">
         <defs>
             <filter id="glow">
                 <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
@@ -251,14 +255,14 @@ nucleo_plasma_html = """
     </svg>
 </div>
 """
-components.html(nucleo_plasma_html, height=240)
+components.html(nucleo_plasma_html, height=180)
 
-# --- MÓDULOS DIVIDIDOS EN 2 COLUMNAS (IZQUIERDA / DERECHA) ---
-col_izq, col_der = st.columns(2)
+# Disposición en 3 columnas: Izquierda (Clima), Centro (CHAT PRIORITARIO), Derecha (Bóveda/Enlaces)
+col_izq, col_centro, col_der = st.columns([1, 2, 1])
 
-# --- COLUMNA IZQUIERDA: MÓDULO 1 (CLIMA) & MÓDULO 3 (CIFRADO) ---
+# --- COLUMNA IZQUIERDA: TELEMETRÍA CLIMÁTICA ---
 with col_izq:
-    st.markdown("### 🌤️ Telemetría Climática (Buin)")
+    st.markdown("### 🌤️ Clima Buin")
     try:
         url_clima = "https://api.open-meteo.com/v1/forecast?latitude=-33.7331&longitude=-70.7423&current=temperature_2m,relative_humidity_2m,wind_speed_10m&timezone=auto"
         res_clima = requests.get(url_clima, timeout=3)
@@ -268,64 +272,41 @@ with col_izq:
             hum = data_clima.get("relative_humidity_2m", "--")
             viento = data_clima.get("wind_speed_10m", "--")
             
-            c1, c2, c3 = st.columns(3)
-            c1.metric("Temperatura", f"{temp} °C")
-            c2.metric("Humedad", f"{hum} %")
-            c3.metric("Viento", f"{viento} km/h")
+            st.metric("Temperatura", f"{temp} °C")
+            st.metric("Humedad", f"{hum} %")
+            st.metric("Viento", f"{viento} km/h")
         else:
-            st.info("Sensores de clima reconectando...")
+            st.caption("Reconectando clima...")
     except Exception:
-        st.warning("Clima atmosférico: Fuera de alcance")
+        st.caption("Clima no disponible")
 
-    st.divider()
-
-    st.markdown("### 🔐 Generador de Cifrado Cuántico")
-    longitud = st.slider("Longitud de clave", min_value=8, max_value=32, value=16)
-    if st.button("Generar Clave Segura", use_container_width=True):
-        caracteres = string.ascii_letters + string.digits + "!@#$%^&*()_+"
-        clave_gen = ''.join(random.choice(caracteres) for _ in range(longitud))
-        st.code(clave_gen, language="")
-
-# --- COLUMNA DERECHA: MÓDULO 4 (ACCESOS DIRECTOS / ENLACES) ---
-with col_der:
-    st.markdown("### 🔗 Matriz de Enlaces Rápidos")
-    st.caption("Accesos directos autorizados a plataformas externas")
+# --- COLUMNA CENTRAL: ÁREA DE CHAT (PRIORIDAD) ---
+with col_centro:
+    st.markdown("### 💬 Consola de Mando")
     
-    st.markdown('<a href="https://buda.com" target="_blank" class="tactical-link">⚡ Buda.com (Cripto Chile)</a>', unsafe_allow_html=True)
-    st.markdown('<a href="https://crypto.com" target="_blank" class="tactical-link">🪙 Crypto.com Exchange</a>', unsafe_allow_html=True)
-    st.markdown('<a href="https://fintual.cl" target="_blank" class="tactical-link">📈 Fintual (Inversiones)</a>', unsafe_allow_html=True)
-    st.markdown('<a href="https://interactivebrokers.com" target="_blank" class="tactical-link">🌐 Interactive Brokers</a>', unsafe_allow_html=True)
-    st.markdown('<a href="https://scribd.com" target="_blank" class="tactical-link">📚 Scribd (Biblioteca)</a>', unsafe_allow_html=True)
+    if "messages" not in st.session_state:
+        st.session_state.messages = []
 
-st.divider()
+    # Contenedor con altura limitada para mantener el chat acortado y centrado
+    with st.container(height=320):
+        for message in st.session_state.messages:
+            with st.chat_message(message["role"]):
+                st.markdown(message["content"])
+                if "audio" in message and message["audio"]:
+                    st.audio(message["audio"], format="audio/mp3")
 
-# --- ÁREA DE CHAT ---
-if "messages" not in st.session_state:
-    st.session_state.messages = []
+    prompt = st.chat_input("Comando para N.O.V.A...")
 
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.markdown(message["content"])
-        if "audio" in message and message["audio"]:
-            st.audio(message["audio"], format="audio/mp3")
+    if prompt:
+        st.session_state.messages.append({"role": "user", "content": prompt})
+        puente.registrar_transmision("NOVA", prompt)
 
-prompt = st.chat_input("Ingrese comando, consulta o instrucción táctica para N.O.V.A...")
-
-if prompt:
-    st.session_state.messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user"):
-        st.markdown(prompt)
-
-    puente.registrar_transmision("NOVA", prompt)
-
-    with st.chat_message("assistant"):
         ahora = datetime.now(CHILE_TZ)
         hora_num = ahora.hour
         hora_actual_str = ahora.strftime("%H:%M:%S")
         fecha_actual_str = ahora.strftime("%d/%m/%Y")
         p_lower = prompt.lower()
         
-        # Saludo dinámico según la hora local
         if 5 <= hora_num < 12:
             saludo = "Buenos días"
         elif 12 <= hora_num < 20:
@@ -334,26 +315,36 @@ if prompt:
             saludo = "Buenas noches"
         
         if "hola" in p_lower:
-            reply = f"{saludo}, Jefa. Son exactamente las {hora_actual_str} del {fecha_actual_str}. El reloj táctico y el núcleo de plasma están operando en perfecta sincronía. ¿Qué orden ejecutamos hoy?"
+            reply = f"{saludo}, Jefa. Son exactamente las {hora_actual_str} del {fecha_actual_str}. El núcleo opera en sincronía. ¿Instrucciones?"
         elif "hora" in p_lower or "fecha" in p_lower:
-            reply = f"Confirmado, Jefa: hoy es {fecha_actual_str} y la hora exacta en su ubicación es {hora_actual_str}."
-        elif "bitcoin" in p_lower or "btc" in p_lower or "mercado" in p_lower:
-            reply = "Accediendo a las métricas del mercado en tiempo real. Los paneles secundarios están disponibles a su izquierda."
+            reply = f"Confirmado: hoy es {fecha_actual_str} y la hora exacta en Buin es {hora_actual_str}."
         elif "jarvis" in p_lower or "viernes" in p_lower:
-            reply = "Enlace con J.A.R.V.I.S. activo. Reportan telemetría estable."
+            reply = "Enlace activo. Telemetría estable."
         elif "purga" in p_lower or "limpiar" in p_lower:
-            reply = "Módulo de purga preparado. Puede ejecutar la limpieza desde el panel lateral."
+            reply = "Ejecute la limpieza desde la barra lateral."
         else:
-            reply = f"Comando '{prompt}' recibido y en procesamiento, Jefa. Sistemas en alerta constante."
-        
-        st.markdown(reply)
+            reply = f"Comando '{prompt}' procesado, Jefa. Sistemas en alerta."
         
         try:
             from gtts import gTTS
             tts = gTTS(text=reply, lang='es')
             audio_path = "respuesta_nova.mp3"
             tts.save(audio_path)
-            st.audio(audio_path, format="audio/mp3", autoplay=True)
             st.session_state.messages.append({"role": "assistant", "content": reply, "audio": audio_path})
         except Exception:
             st.session_state.messages.append({"role": "assistant", "content": reply})
+        st.rerun()
+
+# --- COLUMNA DERECHA: CIFRADO Y ACCESOS RÁPIDOS ---
+with col_der:
+    st.markdown("### 🔐 Cifrado Cuántico")
+    longitud = st.slider("Longitud", min_value=8, max_value=24, value=12)
+    if st.button("Generar Clave", use_container_width=True):
+        caracteres = string.ascii_letters + string.digits + "!@#$"
+        clave_gen = ''.join(random.choice(caracteres) for _ in range(longitud))
+        st.code(clave_gen, language="")
+
+    st.markdown("### 🔗 Accesos Rápidos")
+    st.markdown('<a href="https://crypto.com" target="_blank" class="tactical-link">🪙 Crypto.com</a>', unsafe_allow_html=True)
+    st.markdown('<a href="https://fintual.cl" target="_blank" class="tactical-link">📈 Fintual</a>', unsafe_allow_html=True)
+    st.markdown('<a href="https://scribd.com" target="_blank" class="tactical-link">📚 Scribd</a>', unsafe_allow_html=True)
