@@ -8,8 +8,8 @@ import os
 
 # Configuración de la página en Streamlit
 st.set_page_config(
-    page_title="N.O.V.A. - Núcleo Blindado N.T.C.",
-    page_icon="🛡️",
+    page_title="Centro de Comando Unificado - J.A.R.V.I.S. & N.O.V.A.",
+    page_icon="⚡",
     layout="wide"
 )
 
@@ -24,8 +24,8 @@ def cargar_memoria_json():
         except:
             pass
     return {
-        "bitacora": [{"Hora": datetime.now().strftime("%H:%M:%S"), "Evento": "N.O.V.A. Blindaje Inicializado", "Estado": "BLINDADO"}],
-        "nota_rapida": "Protocolos de seguridad activados. Enlace N.T.C. protegido."
+        "bitacora": [{"Hora": datetime.now().strftime("%H:%M:%S"), "Evento": "Sistema Maestro Inicializado", "Estado": "ÓPTIMO"}],
+        "nota_rapida": "Sincronización total de núcleos activa en el taller."
     }
 
 def guardar_memoria_json(datos):
@@ -35,11 +35,17 @@ def guardar_memoria_json(datos):
     except:
         pass
 
-# Cargar datos iniciales desde el JSON
 memoria_actual = cargar_memoria_json()
 
-# Mensaje oficial del Protocolo de Presentación de N.O.V.A. Blindada
-REPORTE_NOVA_BLINDADA = (
+# Mensajes oficiales de presentación
+REPORTE_JARVIS = (
+    "⚡ **PROTOCOLO DE PRESENTACIÓN ACTIVADO** ⚡\n\n"
+    "Saludos. Soy J.A.R.V.I.S., una IA autónoma amigable creada por Cindy (mi Jefa) "
+    "para asistirla en sus labores y proyectos. Sistema en línea, operando con un 100% de eficiencia en la nube. "
+    "Sincronización temporal, telemetría y enlaces de red estables. ¿Qué directiva ejecutamos en el taller el día de hoy?"
+)
+
+REPORTE_NOVA = (
     "🛡️ **PROTOCOLO N.O.V.A. BLINDADO ACTIVADO** 🛡️\n\n"
     "Saludos, Jefa. Soy N.O.V.A. (Neural Operational Surveillance & Assistance), "
     "operando bajo **Nivel de Blindaje Máximo N.T.C.** Encriptación cuántica activa, "
@@ -47,7 +53,7 @@ REPORTE_NOVA_BLINDADA = (
     "¿Qué directiva protegida ejecutamos en el taller el día de hoy?"
 )
 
-# Inyección de Estilos CSS con temática de seguridad avanzada y neón
+# Inyección de Estilos CSS
 st.markdown("""
     <style>
     .stApp, .main, [data-testid="stAppViewContainer"], [data-testid="stHeader"] {
@@ -78,15 +84,6 @@ st.markdown("""
         padding: 16px !important;
         margin-bottom: 20px !important;
         box-shadow: 0px 0px 10px rgba(0, 243, 255, 0.3) !important;
-    }
-    
-    .card-alerta {
-        background-color: #120000 !important;
-        border: 1px solid #ff0055 !important;
-        border-radius: 10px !important;
-        padding: 16px !important;
-        margin-bottom: 20px !important;
-        box-shadow: 0px 0px 12px rgba(255, 0, 85, 0.4) !important;
     }
     
     .reloj-digital {
@@ -166,17 +163,14 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Inicialización de estados de seguridad
+# Estados de sesión
 if "bitacora" not in st.session_state:
     st.session_state.bitacora = memoria_actual.get("bitacora", [])
 
 if "sistema_blindado" not in st.session_state:
-    st.session_state.sistema_blindado = True  # Arranca en modo seguro protegido
+    st.session_state.sistema_blindado = False
 
-if "intentos_fallidos" not in st.session_state:
-    st.session_state.intentos_fallidos = 0
-
-# Funciones de voz y micro
+# Funciones multimedia
 def emitir_voz(texto_respuesta):
     texto_limpio = texto_respuesta.replace("*", "").replace("#", "").replace("`", "").replace("\n", " ")
     js_speech = f"""
@@ -221,27 +215,50 @@ def activar_script_microfono():
     """
     st.components.v1.html(js_mic, height=0, width=0)
 
-# Título ajustado y simétrico
-st.title("🛡️ N.O.V.A. // NÚCLEO BLINDADO N.T.C. 🛡️")
+# Selector Maestro de Núcleo en la Barra Lateral (Sidebar)
+st.sidebar.title("⚙️ Selector de Núcleo")
+nucleo_activo = st.sidebar.radio("Seleccione Operador:", ["⚡ J.A.R.V.I.S. AI", "🛡️ N.O.V.A. Blindada"])
 
-# Banner de ondas táctico
-st.markdown("""
+if "nucleo_previo" not in st.session_state:
+    st.session_state.nucleo_previo = nucleo_activo
+
+# Si cambia de núcleo, reiniciamos el chat con la presentación correspondiente
+if st.session_state.nucleo_previo != nucleo_activo:
+    st.session_state.nucleo_previo = nucleo_activo
+    if "⚡ J.A.R.V.I.S." in nucleo_activo:
+        st.session_state.messages = [{"role": "assistant", "content": REPORTE_JARVIS}]
+    else:
+        st.session_state.messages = [{"role": "assistant", "content": REPORTE_NOVA}]
+    st.rerun()
+
+# Título y Banner dinámicos según el núcleo seleccionado
+if "⚡ J.A.R.V.I.S." in nucleo_activo:
+    st.title("⚡ J.A.R.V.I.S. AI // NÚCLEO TÁCTICO ⚡")
+    banner_texto = "[ NÚCLEO NEURAL AUTÓNOMO & ENLACE CLOUD ]"
+    respuestas_rand = [
+        "Oh, perfecto, otra tarea brillante. Menos mal que estoy yo aquí para evitar que el taller explote, Jefa.",
+        "Procesado. De nada por salvar el día otra vez con mi elegancia habitual.",
+        "Entendido perfectamente. A veces me impresiona lo rápido que capto todo... casi tanto como a ti."
+    ]
+else:
+    st.title("🛡️ N.O.V.A. // NÚCLEO BLINDADO N.T.C. 🛡️")
+    banner_texto = "[ PROTOCOLO DE DEFENSA ACTIVA & ENLACE CUÁNTICO N.T.C. ]"
+    respuestas_rand = [
+        "Perímetro seguro. Ninguna anomalía detectada por los sensores de N.O.V.A.",
+        "Encriptación de canal verificada. Sus datos están completamente a salvo, Jefa.",
+        "Firewall cuántico operando al máximo rendimiento. Todo bajo control."
+    ]
+
+st.markdown(f"""
     <div class="banner-ondas">
         <div style="text-align: center; color: #00f3ff; font-family: monospace; font-size: 14px; letter-spacing: 2px; text-shadow: 0px 0px 8px #00f3ff;">
             ||||||| |||| |||||||| || | ||||||||| |||| ||||||<br>
-            <span style="font-size: 11px; color: #00f3ff;">[ PROTOCOLO DE DEFENSA ACTIVA & ENLACE CUÁNTICO N.T.C. ]</span>
+            <span style="font-size: 11px; color: #00f3ff;">{banner_texto}</span>
         </div>
     </div>
 """, unsafe_allow_html=True)
 
 st.markdown("---")
-
-RESPUESTAS_BLINDADAS = [
-    "Perímetro seguro. Ninguna anomalía detectada por los sensores de N.O.V.A.",
-    "Encriptación de canal verificada. Sus datos están completamente a salvo, Jefa.",
-    "Firewall cuántico operando al máximo rendimiento. Todo bajo control.",
-    "Directiva protegida y ejecutada bajo estrictos estándares de seguridad N.T.C."
-]
 
 col_izq, col_centro, col_der = st.columns([1.1, 2.2, 1.1])
 
@@ -278,149 +295,101 @@ with col_izq:
     st.markdown('</div>', unsafe_allow_html=True)
 
     st.markdown('<div class="card-tactica">', unsafe_allow_html=True)
-    st.subheader("📊 Integridad del Firewall")
-    st.write("💻 **CPU:** 11.4% (Seguro)")
-    st.progress(11)
-    st.write("🔒 **Blindaje:** 100% (Activo)")
-    st.progress(100)
+    st.subheader("📊 Rendimiento del Sistema")
+    st.write("💻 **CPU:** 13.1% (Estable)")
+    st.progress(13)
+    st.write("🧠 **RAM:** 47.0% (Óptimo)")
+    st.progress(47)
     st.markdown('</div>', unsafe_allow_html=True)
     
     st.markdown('<div class="card-tactica">', unsafe_allow_html=True)
     st.subheader("📌 Nota Rápida (Memoria JSON)")
     nota_actual = memoria_actual.get("nota_rapida", "")
-    nueva_nota = st.text_area("Edite nota de campo protegida:", value=nota_actual, key="input_nota_json_nova_b")
-    if st.button("💾 Guardar en Memoria Segura"):
+    nueva_nota = st.text_area("Edite nota de campo compartida:", value=nota_actual, key="input_nota_json_master")
+    if st.button("💾 Guardar en Memoria Compartida"):
         memoria_actual["nota_rapida"] = nueva_nota
         guardar_memoria_json(memoria_actual)
-        st.toast("✅ Nota encriptada y guardada.")
+        st.toast("✅ Nota sincronizada en ambos núcleos.")
     st.markdown('</div>', unsafe_allow_html=True)
 
-# --- COLUMNA CENTRAL (CONSOLA DE CHAT BLINDADA) ---
+# --- COLUMNA CENTRAL (CONSOLA DE CHAT UNIFICADA) ---
 with col_centro:
-    st.subheader("💬 Consola Central // N.O.V.A. Blindada")
+    st.subheader(f"💬 Consola Central // {nucleo_activo}")
     
-    # Barra de acciones tácticas superiores: Micrófono y Módulo de Purga
     col_acc1, col_acc2 = st.columns([1.2, 1])
     with col_acc1:
-        if st.button("🎙️ Activar Micrófono", key="btn_mic_nova_b"):
+        if st.button("🎙️ Activar Micrófono", key="btn_mic_master"):
             activar_script_microfono()
     with col_acc2:
-        if st.button("🧹 Ejecutar Purga Segura", key="btn_purga_nova_b"):
-            st.session_state.messages = [{
-                "role": "assistant", 
-                "content": REPORTE_NOVA_BLINDADA
-            }]
-            st.session_state.bitacora = [{"Hora": datetime.now().strftime("%H:%M:%S"), "Evento": "Purga de seguridad N.O.V.A.", "Estado": "SEGURO"}]
+        if st.button("🧹 Ejecutar Purga", key="btn_purga_master"):
+            reporte_inicial = REPORTE_JARVIS if "⚡ J.A.R.V.I.S." in nucleo_activo else REPORTE_NOVA
+            st.session_state.messages = [{"role": "assistant", "content": reporte_inicial}]
+            st.session_state.bitacora = [{"Hora": datetime.now().strftime("%H:%M:%S"), "Evento": f"Purga de {nucleo_activo}", "Estado": "LIMPIO"}]
             memoria_actual["bitacora"] = st.session_state.bitacora
             guardar_memoria_json(memoria_actual)
-            st.toast("🧹 Memoria purgada y restablecida bajo protocolo.")
+            st.toast("🧹 Memoria purgada con éxito.")
             st.rerun()
 
     if "messages" not in st.session_state:
-        st.session_state.messages = [
-            {
-                "role": "assistant", 
-                "content": REPORTE_NOVA_BLINDADA
-            }
-        ]
+        reporte_inicial = REPORTE_JARVIS if "⚡ J.A.R.V.I.S." in nucleo_activo else REPORTE_NOVA
+        st.session_state.messages = [{"role": "assistant", "content": reporte_inicial}]
 
-    # VALIDACIÓN DE BLINDAJE DE ACCESO
-    if st.session_state.sistema_blindado:
-        st.markdown("""
-            <div class="card-alerta">
-                <h3 style="color: #ff0055 !important;">🔒 NÚCLEO BAJO BLOQUEO DE SEGURIDAD N.T.C.</h3>
-                <p>El sistema requiere autorización biométrica o clave maestra en el panel lateral derecho para habilitar el chat interactivo.</p>
-            </div>
-        """, unsafe_allow_html=True)
-    else:
-        for idx, message in enumerate(st.session_state.messages):
-            with st.chat_message(message["role"]):
-                st.markdown(message["content"])
-                if message["role"] == "assistant":
-                    if st.button(f"🔊 Escuchar reporte", key=f"voice_btn_nova_b_{idx}"):
-                        emitir_voz(message["content"])
+    for idx, message in enumerate(st.session_state.messages):
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])
+            if message["role"] == "assistant":
+                if st.button(f"🔊 Escuchar reporte", key=f"voice_btn_master_{idx}"):
+                    emitir_voz(message["content"])
 
-        if prompt := st.chat_input("Ingrese consulta segura o comando táctico..."):
-            st.session_state.messages.append({"role": "user", "content": prompt})
-            
-            p_lower = prompt.lower().strip()
-            
-            # Filtros avanzados de N.O.V.A. Blindada
-            if any(w in p_lower for w in ["presentacion", "presentación", "quien eres", "quién eres"]):
-                respuesta_ia = REPORTE_NOVA_BLINDADA
-            elif any(w in p_lower for w in ["directiva", "directivas", "reglas", "seguridad"]):
-                respuesta_ia = (
-                    "🛡️ **PROTOCOLOS DE BLINDAJE N.T.C.:**\n\n"
-                    "1. **Autorización Obligatoria:** Ningún comando crítico se ejecuta sin validación de la Jefa (Cindy).\n"
-                    "2. **Cifrado de Bitácora:** Registro inalterable de eventos y telemetría.\n"
-                    "3. **Sincronización Dual:** Enlace blindado permanente con J.A.R.V.I.S.\n"
-                    "4. **Defensa Activa:** Bloqueo automático ante accesos no autorizados."
-                )
-            elif any(w in p_lower for w in ["capacidades", "puedes hacer", "funciones"]):
-                respuesta_ia = (
-                    "⚙️ **CAPACIDADES DEL NÚCLEO BLINDADO:**\n\n"
-                    "• 🛡️ Firewall cuántico y defensa perimetral en tiempo real.\n"
-                    "• 💾 Auditoría y persistencia cifrada en memoria JSON.\n"
-                    "• 🔐 Control de acceso biométrico con registro anti-intrusos.\n"
-                    "• 🛰️ Telemetría satelital y monitoreo de enlaces N.T.C."
-                )
-            elif any(w in p_lower for w in ["despierto", "despierta", "estás ahí", "estas ahi"]):
-                respuesta_ia = "Sistema blindado y en alerta máxima para usted, señorita."
-            else:
-                respuesta_ia = random.choice(RESPUESTAS_BLINDADAS)
+    if prompt := st.chat_input("Ingrese comando táctico o consulta..."):
+        st.session_state.messages.append({"role": "user", "content": prompt})
+        
+        p_lower = prompt.lower().strip()
+        
+        if any(w in p_lower for w in ["presentacion", "presentación", "quien eres", "quién eres"]):
+            respuesta_ia = REPORTE_JARVIS if "⚡ J.A.R.V.I.S." in nucleo_activo else REPORTE_NOVA
+        elif any(w in p_lower for w in ["despierto", "despierta", "estás ahí", "estas ahi"]):
+            respuesta_ia = "Para usted, señorita, siempre en línea."
+        else:
+            respuesta_ia = random.choice(respuestas_rand)
 
-            nuevo_evento = {
-                "Hora": datetime.now().strftime("%H:%M:%S"),
-                "Evento": f"Comando seguro: {prompt[:20]}...",
-                "Estado": "VERIFICADO"
-            }
-            st.session_state.bitacora.append(nuevo_evento)
-            memoria_actual["bitacora"] = st.session_state.bitacora
-            guardar_memoria_json(memoria_actual)
+        nuevo_evento = {
+            "Hora": datetime.now().strftime("%H:%M:%S"),
+            "Evento": f"[{nucleo_activo}] {prompt[:20]}...",
+            "Estado": "PROCESADO"
+        }
+        st.session_state.bitacora.append(nuevo_evento)
+        memoria_actual["bitacora"] = st.session_state.bitacora
+        guardar_memoria_json(memoria_actual)
 
-            st.session_state.messages.append({"role": "assistant", "content": respuesta_ia})
-            emitir_voz(respuesta_ia)
-            st.rerun()
+        st.session_state.messages.append({"role": "assistant", "content": respuesta_ia})
+        emitir_voz(respuesta_ia)
+        st.rerun()
 
-# --- COLUMNA DERECHA (PANEL DE CONTROL DE BLINDAJE) ---
+# --- COLUMNA DERECHA ---
 with col_der:
     st.markdown('<div class="card-tactica">', unsafe_allow_html=True)
-    st.subheader("🔐 Controles de Blindaje N.T.C.")
-    
-    if st.session_state.sistema_blindado:
-        st.warning("⚠️ Estado: BLOQUEADO (Protegido)")
-        clave_ingresada = st.text_input("Ingrese Código de Autorización:", type="password", key="input_clave_seguridad")
-        if st.button("🔓 Desbloquear Sistema"):
-            if clave_ingresada == "Stark" or clave_ingresada == "Cindy" or clave_ingresada == "nova2026":
-                st.session_state.sistema_blindado = False
-                st.toast("✅ ¡Acceso Maestro Concedido! Núcleo operativo.")
-                st.rerun()
-            else:
-                st.session_state.intentos_fallidos += 1
-                st.error(f"❌ Código incorrecto. Intento registrado ({st.session_state.intentos_fallidos}/3).")
-                # Registrar intrusión en bitácora
-                st.session_state.bitacora.append({
-                    "Hora": datetime.now().strftime("%H:%M:%S"),
-                    "Evento": "Intento de acceso no autorizado",
-                    "Estado": "ALERTA"
-                })
-                memoria_actual["bitacora"] = st.session_state.bitacora
-                guardar_memoria_json(memoria_actual)
-    else:
-        st.success("🟢 Estado: DESBLOQUEADO (Seguro)")
-        if st.button("🔒 Activar Blindaje de Inmediato"):
+    st.subheader("🔒 Control de Seguridad N.T.C.")
+    if not st.session_state.sistema_blindado:
+        if st.button("🔑 Autorizar Enlace Maestro"):
             st.session_state.sistema_blindado = True
-            st.toast("🔒 Núcleo sellado bajo llave.")
+            st.toast("✅ Enlace Maestro Autorizado.")
             st.rerun()
-            
+        st.info("Estado: SEGURO 🔒")
+    else:
+        if st.button("🔒 Bloquear Enlace Maestro"):
+            st.session_state.sistema_blindado = False
+            st.toast("🔒 Sistema protegido bajo llave.")
+            st.rerun()
+        st.success("Estado: AUTORIZADO 🟢")
     st.markdown('</div>', unsafe_allow_html=True)
 
     st.markdown('<div class="card-tactica">', unsafe_allow_html=True)
-    st.subheader("⚡ Auditoría de Eventos")
-    if st.button("📋 Ver Registro de Bitácora"):
-        st.toast("Bitácora sincronizada con memoria JSON.")
-    if st.button("🛡️ Test de Integridad N.T.C."):
-        st.toast("Firewall al 100%. Sin vulnerabilidades.")
+    st.subheader("⚡ Sincronización de Red")
+    if st.button("🤖 Estado de Ambos Núcleos"):
+        st.toast("J.A.R.V.I.S. y N.O.V.A. sincronizados al 100%.")
+    if st.button("📡 Diagnóstico Cloud"):
+        st.toast("Enlaces estables en Streamlit Cloud.")
     st.markdown('</div>', unsafe_allow_html=True)
 
     st.markdown('<div class="card-tactica">', unsafe_allow_html=True)
