@@ -220,7 +220,7 @@ def activar_script_microfono():
 
 # Selector Maestro de Núcleo en la Barra Lateral (Sidebar)
 st.sidebar.title("⚙️ Selector de Núcleo")
-nucleo_activo = st.sidebar.radio("Seleccione Operador:", ["⚡ J.A.R.V.I.S. AI", "🛡️ N.O.V.A. Blindada"])
+nucleo_activo = st.sidebar.radio("Seleccione Operador:", ["⚡ J.A.R.V.I.S. AI", "🛡️ NOVA Blindada"])
 
 st.sidebar.markdown("---")
 st.sidebar.subheader("📚 Módulos de Conocimiento")
@@ -231,15 +231,15 @@ if "nucleo_previo" not in st.session_state:
 
 if st.session_state.nucleo_previo != nucleo_activo:
     st.session_state.nucleo_previo = nucleo_activo
-    if "⚡ J.A.R.V.I.S." in nucleo_activo:
+    if "J.A.R.V.I.S." in nucleo_activo:
         st.session_state.messages = [{"role": "assistant", "content": REPORTE_JARVIS}]
     else:
         st.session_state.messages = [{"role": "assistant", "content": REPORTE_NOVA}]
     st.rerun()
 
-# Título y Banner dinámicos corregidos según el núcleo exacto seleccionado
-if "N.O.V.A." in nucleo_activo:
-    st.title("🛡️ N.O.V.A. // CENTRO DE CONOCIMIENTO N.T.C. 🛡️")
+# Título y Banner dinámicos con detección limpia de NOVA o JARVIS
+if "NOVA" in nucleo_activo:
+    st.title("🛡️ NOVA // CENTRO DE CONOCIMIENTO N.T.C. 🛡️")
     banner_texto = "[ NÚCLEO BLINDADO & ARCHIVO TÁCTICO N.T.C. ]"
     respuestas_rand = [
         "Perímetro seguro y base de datos verificada sin anomalías.",
@@ -350,7 +350,7 @@ with col_centro:
                 activar_script_microfono()
         with col_acc2:
             if st.button("🧹 Ejecutar Purga", key="btn_purga_master"):
-                reporte_inicial = REPORTE_JARVIS if "⚡ J.A.R.V.I.S." in nucleo_activo else REPORTE_NOVA
+                reporte_inicial = REPORTE_JARVIS if "J.A.R.V.I.S." in nucleo_activo else REPORTE_NOVA
                 st.session_state.messages = [{"role": "assistant", "content": reporte_inicial}]
                 st.session_state.bitacora = [{"Hora": datetime.now().strftime("%H:%M:%S"), "Evento": f"Purga de {nucleo_activo}", "Estado": "LIMPIO"}]
                 memoria_actual["bitacora"] = st.session_state.bitacora
@@ -359,7 +359,7 @@ with col_centro:
                 st.rerun()
 
         if "messages" not in st.session_state:
-            reporte_inicial = REPORTE_JARVIS if "⚡ J.A.R.V.I.S." in nucleo_activo else REPORTE_NOVA
+            reporte_inicial = REPORTE_JARVIS if "J.A.R.V.I.S." in nucleo_activo else REPORTE_NOVA
             st.session_state.messages = [{"role": "assistant", "content": reporte_inicial}]
 
         for idx, message in enumerate(st.session_state.messages):
@@ -381,7 +381,7 @@ with col_centro:
             elif "tarea" in p_lower or "productividad" in p_lower or "pendiente" in p_lower:
                 respuesta_ia = f"📋 **Productividad y Tareas:**\n\n{memoria_actual.get('productividad_tareas', '')}"
             elif any(w in p_lower for w in ["presentacion", "presentación", "quien eres", "quién eres"]):
-                respuesta_ia = REPORTE_JARVIS if "⚡ J.A.R.V.I.S." in nucleo_activo else REPORTE_NOVA
+                respuesta_ia = REPORTE_JARVIS if "J.A.R.V.I.S." in nucleo_activo else REPORTE_NOVA
             else:
                 respuesta_ia = random.choice(respuestas_rand)
 
