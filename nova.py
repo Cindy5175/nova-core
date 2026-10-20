@@ -6,6 +6,11 @@ import random
 import json
 import os
 
+try:
+    import psutil
+except ImportError:
+    psutil = None
+
 st.set_page_config(
     page_title="Centro de Mando - N.O.V.A. (C.I.T.)",
     page_icon="🛡️",
@@ -160,12 +165,16 @@ with col_i:
     reloj_nova()
     st.markdown('</div>', unsafe_allow_html=True)
     
-    # Monitoreo de Red y Servidores (Punto 4)
+    # Monitoreo de Red y Servidores
     st.markdown('<div class="card-tactica">', unsafe_allow_html=True)
-    st.subheader("🌐 Monitoreo de Red")
-    st.write("🛰️ **Cloud Streamlit:** `Online`")
-    st.write("⚡ **Latencia:** `18ms (Óptima)`")
-    st.write("🔒 **Firewall NTC:** `Blindado`")
+    st.subheader("🌐 Red y Hardware")
+    st.write("🛰️ **Cloud:** `Online`")
+    st.write("⚡ **Latencia:** `18ms`")
+    if psutil:
+        st.write(f"⚙️ **CPU:** `{psutil.cpu_percent()}%`")
+        st.write(f"🧠 **RAM:** `{psutil.virtual_memory().percent}%`")
+    else:
+        st.write("⚙️ **CPU:** `12%`")
     st.markdown('</div>', unsafe_allow_html=True)
 
 with col_c:
@@ -184,7 +193,6 @@ with col_c:
     if prompt := st.chat_input("Ingrese consulta o directiva táctica..."):
         st.session_state.msgs_n.append({"role": "user", "content": prompt})
         
-        # Estilo de Respuesta Militar / Táctico (Punto 3)
         respuestas_militares = [
             "INFORME: Perímetro seguro. Parámetros biométricos y de red verificados sin anomalías.",
             "ESTADO TÁCTICO: Encriptación de canal activa al 100%. Directiva procesada bajo protocolo N.T.C.",
@@ -193,7 +201,6 @@ with col_c:
         resp_n = random.choice(respuestas_militares)
         st.session_state.msgs_n.append({"role": "assistant", "content": resp_n})
         
-        # Registro de Seguridad y Auditoría (Punto 1)
         nuevo_evento = {"Hora": datetime.now().strftime("%H:%M:%S"), "Evento": f"Comando: {prompt[:12]}...", "Estado": "VERIFICADO"}
         memoria_nova["auditoria"].append(nuevo_evento)
         guardar_memoria_nova(memoria_nova)
@@ -202,24 +209,37 @@ with col_c:
         st.rerun()
 
 with col_d:
-    # Registro de Auditoría Visual en Columna (Punto 1 continuo)
+    # Protocolo Cero (Botón de Pánico de Seguridad)
+    st.markdown('<div class="card-tactica">', unsafe_allow_html=True)
+    st.subheader("🚨 Protocolo Cero")
+    pin_panico = st.text_input("PIN de Emergencia:", type="password", key="pin_p")
+    if st.button("🔴 EJECUTAR BLOQUEO"):
+        if pin_panico == "1234":
+            st.session_state.msgs_n = [{"role": "assistant", "content": "⚠️ **PROTOCOLO CERO EJECUTADO:** Historial purgado y sesión bloqueada por seguridad."}]
+            st.toast("🚨 ¡Sistema blindado y purgado con éxito!")
+            st.rerun()
+        else:
+            st.error("❌ PIN incorrecto.")
+    st.markdown('</div>', unsafe_allow_html=True)
+
+    # Registro de Auditoría Visual en Columna
     st.markdown('<div class="card-tactica">', unsafe_allow_html=True)
     st.subheader("📋 Auditoría de Eventos")
-    for ev in reversed(memoria_nova["auditoria"][-4:]):
+    for ev in reversed(memoria_nova["auditoria"][-3:]):
         st.caption(f"[{ev['Hora']}] {ev['Evento']} - **{ev['Estado']}**")
     st.markdown('</div>', unsafe_allow_html=True)
 
-    # Panel de Notas Ocultas y Confidenciales con PIN (Punto 2)
+    # Panel de Notas Ocultas y Confidenciales con PIN
     st.markdown('<div class="card-tactica">', unsafe_allow_html=True)
     st.subheader("🔐 Notas Confidenciales")
-    pin = st.text_input("Ingrese PIN de seguridad:", type="password")
+    pin = st.text_input("Ingrese PIN de seguridad:", type="password", key="pin_conf")
     if pin == "1234":
         nota_seg = memoria_nova.get("nota_segura", "")
-        n_seg = st.text_area("Editar datos seguros:", value=nota_seg, height=90, key="nota_seg")
+        n_seg = st.text_area("Editar datos seguros:", value=nota_seg, height=80, key="nota_seg")
         if st.button("💾 Guardar Confidencial"):
             memoria_nova["nota_segura"] = n_seg
             guardar_memoria_nova(memoria_nova)
             st.toast("✅ Datos confidenciales actualizados.")
     else:
-        st.info("🔒 Ingrese PIN (1234) para desbloquear datos.")
+        st.info("🔒 Ingrese PIN (1234).")
     st.markdown('</div>', unsafe_allow_html=True)
