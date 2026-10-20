@@ -222,24 +222,43 @@ with col_d:
             st.error("❌ PIN incorrecto.")
     st.markdown('</div>', unsafe_allow_html=True)
 
+    # Bóveda de Notas Confidenciales Mejorada
+    st.markdown('<div class="card-tactica">', unsafe_allow_html=True)
+    st.subheader("🔐 Notas Confidenciales")
+    
+    if "boveda_abierta" not in st.session_state:
+        st.session_state.boveda_abierta = False
+
+    if not st.session_state.boveda_abierta:
+        pin_ingresado = st.text_input("Ingrese PIN de seguridad:", type="password", key="pin_conf")
+        if st.button("🔓 Desbloquear Bóveda"):
+            if pin_ingresado == "1234":
+                st.session_state.boveda_abierta = True
+                st.toast("✅ ¡Bóveda desbloqueada con éxito!")
+                st.rerun()
+            else:
+                st.error("❌ PIN incorrecto.")
+    else:
+        st.success("🟢 Bóveda abierta")
+        nota_seg = memoria_nova.get("nota_segura", "")
+        n_seg = st.text_area("Editar datos seguros:", value=nota_seg, height=90, key="nota_seg")
+        
+        col_ba1, col_ba2 = st.columns(2)
+        with col_ba1:
+            if st.button("💾 Guardar"):
+                memoria_nova["nota_segura"] = n_seg
+                guardar_memoria_nova(memoria_nova)
+                st.toast("✅ Datos confidenciales actualizados.")
+        with col_ba2:
+            if st.button("🔒 Bloquear"):
+                st.session_state.boveda_abierta = False
+                st.rerun()
+                
+    st.markdown('</div>', unsafe_allow_html=True)
+
     # Registro de Auditoría Visual en Columna
     st.markdown('<div class="card-tactica">', unsafe_allow_html=True)
     st.subheader("📋 Auditoría de Eventos")
     for ev in reversed(memoria_nova["auditoria"][-3:]):
         st.caption(f"[{ev['Hora']}] {ev['Evento']} - **{ev['Estado']}**")
-    st.markdown('</div>', unsafe_allow_html=True)
-
-    # Panel de Notas Ocultas y Confidenciales con PIN
-    st.markdown('<div class="card-tactica">', unsafe_allow_html=True)
-    st.subheader("🔐 Notas Confidenciales")
-    pin = st.text_input("Ingrese PIN de seguridad:", type="password", key="pin_conf")
-    if pin == "1234":
-        nota_seg = memoria_nova.get("nota_segura", "")
-        n_seg = st.text_area("Editar datos seguros:", value=nota_seg, height=80, key="nota_seg")
-        if st.button("💾 Guardar Confidencial"):
-            memoria_nova["nota_segura"] = n_seg
-            guardar_memoria_nova(memoria_nova)
-            st.toast("✅ Datos confidenciales actualizados.")
-    else:
-        st.info("🔒 Ingrese PIN (1234).")
     st.markdown('</div>', unsafe_allow_html=True)
