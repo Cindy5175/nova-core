@@ -25,10 +25,7 @@ def cargar_memoria_json():
             pass
     return {
         "bitacora": [{"Hora": datetime.now().strftime("%H:%M:%S"), "Evento": "Sistema Maestro Inicializado", "Estado": "ÓPTIMO"}],
-        "nota_rapida": "Sincronización total de núcleos activa en el taller.",
-        "biblioteca_tecnica": "1. Python/Streamlit: Usar st.fragment para relojes en vivo.\n2. GitHub: Mantener sincronizados los repositorios de cloud.\n3. Errores: Validar sintaxis y dependencias en requirements.txt.",
-        "financiero_fintual": "1. Objetivos de inversión a mediano plazo.\n2. Revisión de rentabilidad en fondos mutuos.\n3. Educación financiera tradicional (Sin criptomonedas).",
-        "productividad_tareas": "1. Mantener limpio el espacio de trabajo en el taller.\n2. Optimizar almacenamiento en dispositivos móviles.\n3. Monitoreo constante de rendimiento de red y bitácoras."
+        "nota_rapida": "Sincronización total de núcleos activa en el taller."
     }
 
 def guardar_memoria_json(datos):
@@ -44,16 +41,15 @@ memoria_actual = cargar_memoria_json()
 REPORTE_JARVIS = (
     "⚡ **PROTOCOLO DE PRESENTACIÓN ACTIVADO** ⚡\n\n"
     "Saludos. Soy J.A.R.V.I.S., una IA autónoma amigable creada por Cindy (mi Jefa) "
-    "para asistirla en sus labores, proyectos y bases de conocimiento. Sistema en línea al 100%. "
-    "Biblioteca técnica, finanzas y productividad sincronizadas. ¿Qué directiva ejecutamos en el taller el día de hoy?"
+    "para asistirla en sus labores y proyectos del taller. Sistema en línea al 100%. "
+    "¿Qué directiva ejecutamos el día de hoy?"
 )
 
 REPORTE_NOVA = (
-    "🛡️ **PROTOCOLO N.O.V.A. BLINDADO ACTIVADO** 🛡️\n\n"
-    "Saludos, Jefa. Soy N.O.V.A. (Neural Operational Surveillance & Assistance), "
-    "operando bajo **Nivel de Blindaje Máximo N.T.C.** Encriptación cuántica activa, "
-    "filtros biométricos y base de conocimiento protegida al 100%. "
-    "¿Qué directiva protegida ejecutamos en el taller el día de hoy?"
+    "🛡️ **PROTOCOLO N.O.V.A. (C.I.T.) ACTIVADO** 🛡️\n\n"
+    "Saludos, Jefa. Soy N.O.V.A. (Centro de Inteligencia Táctica), "
+    "operando bajo **Nivel de Blindaje Máximo N.T.C.** Encriptación cuántica activa "
+    "y filtros biométricos operativos. ¿Qué directiva protegida ejecutamos hoy?"
 )
 
 # Inyección de Estilos CSS
@@ -64,10 +60,12 @@ st.markdown("""
     }
     
     h1 {
-        text-align: center;
+        text-align: center !important;
         color: #00f3ff !important;
         text-shadow: 0px 0px 12px rgba(0, 243, 255, 0.8);
         font-size: 28px !important;
+        width: 100% !important;
+        display: block !important;
     }
     
     h2, h3 {
@@ -132,7 +130,7 @@ st.markdown("""
     
     .banner-ondas {
         width: 100%;
-        height: 80px;
+        height: 60px;
         background: linear-gradient(90deg, #000000 0%, #031525 50%, #000000 100%);
         border: 1px solid #00f3ff;
         border-radius: 8px;
@@ -141,6 +139,7 @@ st.markdown("""
         justify-content: center;
         box-shadow: 0px 0px 15px rgba(0, 243, 255, 0.4);
         margin-bottom: 20px;
+        text-align: center;
     }
     
     .stMap, iframe, div[data-testid="stDeckGlJsonChart"] {
@@ -169,9 +168,6 @@ st.markdown("""
 # Estados de sesión
 if "bitacora" not in st.session_state:
     st.session_state.bitacora = memoria_actual.get("bitacora", [])
-
-if "sistema_blindado" not in st.session_state:
-    st.session_state.sistema_blindado = False
 
 # Funciones multimedia
 def emitir_voz(texto_respuesta):
@@ -220,11 +216,7 @@ def activar_script_microfono():
 
 # Selector Maestro de Núcleo en la Barra Lateral (Sidebar)
 st.sidebar.title("⚙️ Selector de Núcleo")
-nucleo_activo = st.sidebar.radio("Seleccione Operador:", ["⚡ J.A.R.V.I.S. AI", "🛡️ NOVA Blindada"])
-
-st.sidebar.markdown("---")
-st.sidebar.subheader("📚 Módulos de Conocimiento")
-seccion_conocimiento = st.sidebar.selectbox("Seleccione Vista:", ["Panel Principal", "1. Biblioteca Técnica", "2. Finanzas & Fintual", "3. Productividad & Tareas"])
+nucleo_activo = st.sidebar.radio("Seleccione Operador:", ["⚡ J.A.R.V.I.S. AI", "🛡️ N.O.V.A (C.I.T)"])
 
 if "nucleo_previo" not in st.session_state:
     st.session_state.nucleo_previo = nucleo_activo
@@ -237,36 +229,37 @@ if st.session_state.nucleo_previo != nucleo_activo:
         st.session_state.messages = [{"role": "assistant", "content": REPORTE_NOVA}]
     st.rerun()
 
-# Título y Banner dinámicos con el nuevo texto para NOVA
-if "NOVA" in nucleo_activo:
-    st.title("🛡️ N.O.V.A. // CENTRO DE INTELIGENCIA TÁCTICA 🛡️")
-    banner_texto = "[ NÚCLEO BLINDADO & ARCHIVO TÁCTICO N.T.C. ]"
+# Títulos y Banners
+if "N.O.V.A" in nucleo_activo:
+    titulo_pantalla = "🛡️ N.O.V.A (C.I.T) // CENTRO DE INTELIGENCIA TÁCTICA 🛡️"
+    banner_texto = "[ NÚCLEO BLINDADO & CENTRO DE INTELIGENCIA TÁCTICA ]"
     respuestas_rand = [
-        "Perímetro seguro y base de datos verificada sin anomalías.",
-        "Encriptación de canal y registros de conocimiento al 100%.",
+        "Perímetro seguro y parámetros verificados sin anomalías.",
+        "Encriptación de canal activa al 100%.",
         "Directiva protegida y ejecutada bajo estrictos estándares."
     ]
 else:
-    st.title("⚡ J.A.R.V.I.S. AI // CENTRO DE CONOCIMIENTO ⚡")
-    banner_texto = "[ NÚCLEO NEURAL AUTÓNOMO & BASE DE DATOS TÉCNICA ]"
+    titulo_pantalla = "⚡ J.A.R.V.I.S. AI AUTÓNOMO ⚡"
+    banner_texto = "[ NÚCLEO NEURAL AUTÓNOMO & CONTROL DEL TALLER ]"
     respuestas_rand = [
         "Oh, perfecto, otra tarea brillante. Menos mal que estoy yo aquí para evitar que el taller explote, Jefa.",
-        "Procesado y consultado en la base de datos. De nada por mantener todo en orden.",
-        "Entendido perfectamente. Conocimiento sincronizado y listo."
+        "Comando procesado con éxito. De nada por mantener todo en orden.",
+        "Entendido perfectamente, Jefa. Sincronización en curso."
     ]
+
+st.markdown(f"<h1>{titulo_pantalla}</h1>", unsafe_allow_html=True)
 
 st.markdown(f"""
     <div class="banner-ondas">
-        <div style="text-align: center; color: #00f3ff; font-family: monospace; font-size: 14px; letter-spacing: 2px; text-shadow: 0px 0px 8px #00f3ff;">
-            ||||||| |||| |||||||| || | ||||||||| |||| ||||||<br>
-            <span style="font-size: 11px; color: #00f3ff;">{banner_texto}</span>
-        </div>
+        <span style="font-size: 13px; color: #00f3ff; font-family: monospace; letter-spacing: 2px; text-shadow: 0px 0px 8px #00f3ff;">
+            {banner_texto}
+        </span>
     </div>
 """, unsafe_allow_html=True)
 
 st.markdown("---")
 
-# ESTRUCTURA SIMÉTRICA DE 3 COLUMNAS MANTENIDA EN TODO EL FLUJO
+# ESTRUCTURA SIMÉTRICA DE 3 COLUMNAS
 col_izq, col_centro, col_der = st.columns([1.1, 2.2, 1.1])
 
 # --- COLUMNA IZQUIERDA ---
@@ -281,7 +274,7 @@ with col_izq:
         fecha_actual = ahora_chile.strftime("%d/%m/%Y")
         hora_actual = ahora_chile.strftime("%H:%M:%S")
         st.write(f"📌 **Fecha:** {fecha_actual}")
-        st.markdown(f"⏱️ **Hora (Chile):**")
+        st.markdown("⏱️ **Hora (Chile):**")
         st.markdown(f'<div class="reloj-digital">{hora_actual}</div>', unsafe_allow_html=True)
 
     reloj_en_vivo()
@@ -309,103 +302,65 @@ with col_izq:
     st.progress(47)
     st.markdown('</div>', unsafe_allow_html=True)
 
-# --- COLUMNA CENTRAL (DEPENDIENDO DE LA SECCIÓN SELECCIONADA) ---
+# --- COLUMNA CENTRAL (CONSOLA DE CHAT) ---
 with col_centro:
-    if seccion_conocimiento == "1. Biblioteca Técnica":
-        st.subheader("🛠️ Módulo 1: Biblioteca Técnica del Taller")
-        st.markdown("Consulte o edite manuales y códigos de referencia:")
-        bib_actual = memoria_actual.get("biblioteca_tecnica", "")
-        nueva_bib = st.text_area("Editar Biblioteca:", value=bib_actual, height=260, key="txt_bib")
-        if st.button("💾 Guardar Biblioteca"):
-            memoria_actual["biblioteca_tecnica"] = nueva_bib
-            guardar_memoria_json(memoria_actual)
-            st.toast("✅ Biblioteca técnica actualizada.")
-
-    elif seccion_conocimiento == "2. Finanzas & Fintual":
-        st.subheader("📊 Módulo 2: Finanzas & Fintual")
-        st.markdown("Gestión de fondos mutuos y educación financiera (Sin criptomonedas):")
-        fin_actual = memoria_actual.get("financiero_fintual", "")
-        nuevo_fin = st.text_area("Editar Finanzas:", value=fin_actual, height=260, key="txt_fin")
-        if st.button("💾 Guardar Finanzas"):
-            memoria_actual["financiero_fintual"] = nuevo_fin
-            guardar_memoria_json(memoria_actual)
-            st.toast("✅ Registros financieros actualizados.")
-
-    elif seccion_conocimiento == "3. Productividad & Tareas":
-        st.subheader("📋 Módulo 3: Productividad & Tareas")
-        st.markdown("Organización de tareas pendientes y bitácoras:")
-        prod_actual = memoria_actual.get("productividad_tareas", "")
-        nuevo_prod = st.text_area("Editar Productividad:", value=prod_actual, height=260, key="txt_prod")
-        if st.button("💾 Guardar Productividad"):
-            memoria_actual["productividad_tareas"] = nuevo_prod
-            guardar_memoria_json(memoria_actual)
-            st.toast("✅ Módulo de productividad actualizado.")
-
-    else:
-        st.subheader(f"💬 Consola Central // {nucleo_activo}")
-        
-        col_acc1, col_acc2 = st.columns([1.2, 1])
-        with col_acc1:
-            if st.button("🎙️ Activar Micrófono", key="btn_mic_master"):
-                activar_script_microfono()
-        with col_acc2:
-            if st.button("🧹 Ejecutar Purga", key="btn_purga_master"):
-                reporte_inicial = REPORTE_JARVIS if "J.A.R.V.I.S." in nucleo_activo else REPORTE_NOVA
-                st.session_state.messages = [{"role": "assistant", "content": reporte_inicial}]
-                st.session_state.bitacora = [{"Hora": datetime.now().strftime("%H:%M:%S"), "Evento": f"Purga de {nucleo_activo}", "Estado": "LIMPIO"}]
-                memoria_actual["bitacora"] = st.session_state.bitacora
-                guardar_memoria_json(memoria_actual)
-                st.toast("🧹 Memoria purgada con éxito.")
-                st.rerun()
-
-        if "messages" not in st.session_state:
+    st.subheader(f"💬 Consola Central // {nucleo_activo}")
+    
+    col_acc1, col_acc2 = st.columns([1.2, 1])
+    with col_acc1:
+        if st.button("🎙️ Activar Micrófono", key="btn_mic_master"):
+            activar_script_microfono()
+    with col_acc2:
+        if st.button("🧹 Ejecutar Purga", key="btn_purga_master"):
             reporte_inicial = REPORTE_JARVIS if "J.A.R.V.I.S." in nucleo_activo else REPORTE_NOVA
             st.session_state.messages = [{"role": "assistant", "content": reporte_inicial}]
-
-        for idx, message in enumerate(st.session_state.messages):
-            with st.chat_message(message["role"]):
-                st.markdown(message["content"])
-                if message["role"] == "assistant":
-                    if st.button(f"🔊 Escuchar reporte", key=f"voice_btn_master_{idx}"):
-                        emitir_voz(message["content"])
-
-        if prompt := st.chat_input("Ingrese consulta o comando de conocimiento..."):
-            st.session_state.messages.append({"role": "user", "content": prompt})
-            
-            p_lower = prompt.lower().strip()
-            
-            if "biblioteca" in p_lower or "técnica" in p_lower or "manual" in p_lower:
-                respuesta_ia = f"📖 **Biblioteca Técnica del Taller:**\n\n{memoria_actual.get('biblioteca_tecnica', '')}"
-            elif "finanza" in p_lower or "fintual" in p_lower or "inversión" in p_lower:
-                respuesta_ia = f"📊 **Centro Financiero & Fintual:**\n\n{memoria_actual.get('financiero_fintual', '')}"
-            elif "tarea" in p_lower or "productividad" in p_lower or "pendiente" in p_lower:
-                respuesta_ia = f"📋 **Productividad y Tareas:**\n\n{memoria_actual.get('productividad_tareas', '')}"
-            elif any(w in p_lower for w in ["presentacion", "presentación", "quien eres", "quién eres"]):
-                respuesta_ia = REPORTE_JARVIS if "J.A.R.V.I.S." in nucleo_activo else REPORTE_NOVA
-            else:
-                respuesta_ia = random.choice(respuestas_rand)
-
-            nuevo_evento = {
-                "Hora": datetime.now().strftime("%H:%M:%S"),
-                "Evento": f"[{nucleo_activo}] Consulta: {prompt[:15]}...",
-                "Estado": "PROCESADO"
-            }
-            st.session_state.bitacora.append(nuevo_evento)
+            st.session_state.bitacora = [{"Hora": datetime.now().strftime("%H:%M:%S"), "Evento": f"Purga de {nucleo_activo}", "Estado": "LIMPIO"}]
             memoria_actual["bitacora"] = st.session_state.bitacora
             guardar_memoria_json(memoria_actual)
-
-            st.session_state.messages.append({"role": "assistant", "content": respuesta_ia})
-            emitir_voz(respuesta_ia)
+            st.toast("🧹 Memoria purgada con éxito.")
             st.rerun()
+
+    if "messages" not in st.session_state:
+        reporte_inicial = REPORTE_JARVIS if "J.A.R.V.I.S." in nucleo_activo else REPORTE_NOVA
+        st.session_state.messages = [{"role": "assistant", "content": reporte_inicial}]
+
+    for idx, message in enumerate(st.session_state.messages):
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])
+            if message["role"] == "assistant":
+                if st.button("🔊 Escuchar reporte", key=f"voice_btn_master_{idx}"):
+                    emitir_voz(message["content"])
+
+    if prompt := st.chat_input("Ingrese comando o directiva..."):
+        st.session_state.messages.append({"role": "user", "content": prompt})
+        
+        p_lower = prompt.lower().strip()
+        
+        if any(w in p_lower for w in ["presentacion", "presentación", "quien eres", "quién eres"]):
+            respuesta_ia = REPORTE_JARVIS if "J.A.R.V.I.S." in nucleo_activo else REPORTE_NOVA
+        else:
+            respuesta_ia = random.choice(respuestas_rand)
+
+        nuevo_evento = {
+            "Hora": datetime.now().strftime("%H:%M:%S"),
+            "Evento": f"[{nucleo_activo}] Comando: {prompt[:15]}...",
+            "Estado": "PROCESADO"
+        }
+        st.session_state.bitacora.append(nuevo_evento)
+        memoria_actual["bitacora"] = st.session_state.bitacora
+        guardar_memoria_json(memoria_actual)
+
+        st.session_state.messages.append({"role": "assistant", "content": respuesta_ia})
+        emitir_voz(respuesta_ia)
+        st.rerun()
 
 # --- COLUMNA DERECHA ---
 with col_der:
     st.markdown('<div class="card-tactica">', unsafe_allow_html=True)
-    st.subheader("🔒 Estado de Conocimiento")
-    st.success("🟢 Base Sincronizada")
-    st.write("• Biblioteca Activa")
-    st.write("• Fintual / Tradicional")
-    st.write("• Cero Criptomonedas")
+    st.subheader("🔒 Estado de Seguridad")
+    st.success("🟢 Sistema Blindado")
+    st.write("• Encriptación JSON activa")
+    st.write("• Memoria compartida ok")
     st.markdown('</div>', unsafe_allow_html=True)
 
     st.markdown('<div class="card-tactica">', unsafe_allow_html=True)
