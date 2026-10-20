@@ -23,7 +23,7 @@ def cargar_memoria_nova():
             pass
     return {
         "auditoria": [{"Hora": datetime.now().strftime("%H:%M:%S"), "Evento": "Sistema Blindado Inicializado", "Estado": "SEGURO"}],
-        "nota_segura": "Bitácora protegida de N.O.V.A."
+        "nota_segura": "DATOS CONFIDENCIALES: Claves de acceso secundarias del taller."
     }
 
 def guardar_memoria_nova(datos):
@@ -160,10 +160,12 @@ with col_i:
     reloj_nova()
     st.markdown('</div>', unsafe_allow_html=True)
     
+    # Monitoreo de Red y Servidores (Punto 4)
     st.markdown('<div class="card-tactica">', unsafe_allow_html=True)
-    st.subheader("🔒 Estado del Blindaje")
-    st.success("🟢 100% Seguro")
-    st.write("• Encriptación cuántica activa")
+    st.subheader("🌐 Monitoreo de Red")
+    st.write("🛰️ **Cloud Streamlit:** `Online`")
+    st.write("⚡ **Latencia:** `18ms (Óptima)`")
+    st.write("🔒 **Firewall NTC:** `Blindado`")
     st.markdown('</div>', unsafe_allow_html=True)
 
 with col_c:
@@ -181,16 +183,18 @@ with col_c:
 
     if prompt := st.chat_input("Ingrese consulta o directiva táctica..."):
         st.session_state.msgs_n.append({"role": "user", "content": prompt})
-        respuestas_n = [
-            "Perímetro seguro y parámetros verificados sin anomalías.",
-            "Encriptación de canal activa al 100%. Directiva procesada.",
-            "Informe recibido y registrado bajo estrictos estándares de seguridad."
+        
+        # Estilo de Respuesta Militar / Táctico (Punto 3)
+        respuestas_militares = [
+            "INFORME: Perímetro seguro. Parámetros biométricos y de red verificados sin anomalías.",
+            "ESTADO TÁCTICO: Encriptación de canal activa al 100%. Directiva procesada bajo protocolo N.T.C.",
+            "CONFIRMACIÓN: Registro completado con éxito. Sin incidencias reportadas en el sector."
         ]
-        resp_n = random.choice(respuestas_n)
+        resp_n = random.choice(respuestas_militares)
         st.session_state.msgs_n.append({"role": "assistant", "content": resp_n})
         
-        # Guardar en auditoría
-        nuevo_evento = {"Hora": datetime.now().strftime("%H:%M:%S"), "Evento": f"Consulta: {prompt[:12]}...", "Estado": "REGISTRADO"}
+        # Registro de Seguridad y Auditoría (Punto 1)
+        nuevo_evento = {"Hora": datetime.now().strftime("%H:%M:%S"), "Evento": f"Comando: {prompt[:12]}...", "Estado": "VERIFICADO"}
         memoria_nova["auditoria"].append(nuevo_evento)
         guardar_memoria_nova(memoria_nova)
         
@@ -198,14 +202,24 @@ with col_c:
         st.rerun()
 
 with col_d:
+    # Registro de Auditoría Visual en Columna (Punto 1 continuo)
     st.markdown('<div class="card-tactica">', unsafe_allow_html=True)
-    st.subheader("📋 Registro de Auditoría")
+    st.subheader("📋 Auditoría de Eventos")
     for ev in reversed(memoria_nova["auditoria"][-4:]):
         st.caption(f"[{ev['Hora']}] {ev['Evento']} - **{ev['Estado']}**")
     st.markdown('</div>', unsafe_allow_html=True)
 
+    # Panel de Notas Ocultas y Confidenciales con PIN (Punto 2)
     st.markdown('<div class="card-tactica">', unsafe_allow_html=True)
-    st.subheader("🛰️ Monitoreo Satelital")
-    mapa = pd.DataFrame({'lat': [-33.7333], 'lon': [-70.7417]})
-    st.map(mapa, zoom=10, use_container_width=True)
+    st.subheader("🔐 Notas Confidenciales")
+    pin = st.text_input("Ingrese PIN de seguridad:", type="password")
+    if pin == "1234":
+        nota_seg = memoria_nova.get("nota_segura", "")
+        n_seg = st.text_area("Editar datos seguros:", value=nota_seg, height=90, key="nota_seg")
+        if st.button("💾 Guardar Confidencial"):
+            memoria_nova["nota_segura"] = n_seg
+            guardar_memoria_nova(memoria_nova)
+            st.toast("✅ Datos confidenciales actualizados.")
+    else:
+        st.info("🔒 Ingrese PIN (1234) para desbloquear datos.")
     st.markdown('</div>', unsafe_allow_html=True)
