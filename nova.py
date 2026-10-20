@@ -237,9 +237,9 @@ if st.session_state.nucleo_previo != nucleo_activo:
         st.session_state.messages = [{"role": "assistant", "content": REPORTE_NOVA}]
     st.rerun()
 
-# Título y Banner dinámicos con detección limpia de NOVA o JARVIS
+# Título y Banner dinámicos con el nuevo texto para NOVA
 if "NOVA" in nucleo_activo:
-    st.title("🛡️ NOVA // CENTRO DE CONOCIMIENTO N.T.C. 🛡️")
+    st.title("🛡️ N.O.V.A. // CENTRO DE INTELIGENCIA TÁCTICA 🛡️")
     banner_texto = "[ NÚCLEO BLINDADO & ARCHIVO TÁCTICO N.T.C. ]"
     respuestas_rand = [
         "Perímetro seguro y base de datos verificada sin anomalías.",
