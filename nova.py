@@ -52,15 +52,15 @@ nivel_amenaza = st.sidebar.radio(
 
 # Configuración de Colores de Neón según Nivel DEFCON
 if "DEFCON 1" in nivel_amenaza:
-    color_neon = "#ff0055"  # Rojo Ciberpunk
+    color_neon = "#ff0055"
     sombra_neon = "rgba(255, 0, 85, 0.8)"
     bg_card = "#140005"
 elif "DEFCON 3" in nivel_amenaza:
-    color_neon = "#ffaa00"  # Naranja Táctico
+    color_neon = "#ffaa00"
     sombra_neon = "rgba(255, 170, 0, 0.8)"
     bg_card = "#140a00"
 else:
-    color_neon = "#00f3ff"  # Azul Neón Estándar
+    color_neon = "#00f3ff"
     sombra_neon = "rgba(0, 243, 255, 0.8)"
     bg_card = "#000a12"
 
@@ -78,7 +78,9 @@ textos_nova = {
         "auditoria": "📋 Auditoría de Eventos",
         "escaner": "👁️ Escáner Táctico de Cámara",
         "terminal": "💻 Terminal de Autodiagnóstico",
-        "generador": "🧠 Generador Táctico de Ideas"
+        "generador": "🧠 Generador Táctico de Ideas",
+        "pass_gen": "🔑 Generador de Cifrado",
+        "matrix": "💻 Visualizador Matriz"
     },
     "English 🇺🇸": {
         "titulo": "🛡️ N.O.V.A (C.I.T) // TACTICAL INTELLIGENCE CENTER 🛡️",
@@ -93,7 +95,9 @@ textos_nova = {
         "auditoria": "📋 Event Audit",
         "escaner": "👁️ Tactical Camera Scanner",
         "terminal": "💻 Diagnostic Terminal",
-        "generador": "🧠 Tactical Idea Generator"
+        "generador": "🧠 Tactical Idea Generator",
+        "pass_gen": "🔑 Encryption Pass Generator",
+        "matrix": "💻 Matrix Visualizer"
     },
     "Français 🇫🇷": {
         "titulo": "🛡️ N.O.V.A (C.I.T) // CENTRE D'INTELLIGENCE TACTIQUE 🛡️",
@@ -108,7 +112,9 @@ textos_nova = {
         "auditoria": "📋 Audit des Événements",
         "escaner": "👁️ Scanner Tactique Caméra",
         "terminal": "💻 Terminal de Diagnostic",
-        "generador": "🧠 Générateur d'Idées Tactic"
+        "generador": "🧠 Générateur d'Idées Tactic",
+        "pass_gen": "🔑 Générateur de Clés",
+        "matrix": "💻 Visualiseur Matrice"
     },
     "Português 🇧🇷": {
         "titulo": "🛡️ N.O.V.A (C.I.T) // CENTRO DE INTELIGÊNCIA TÁTICA 🛡️",
@@ -123,7 +129,9 @@ textos_nova = {
         "auditoria": "📋 Auditoria de Eventos",
         "escaner": "👁️ Scanner Tático de Câmera",
         "terminal": "💻 Terminal de Diagnóstico",
-        "generador": "🧠 Gerador de Ideias Táticas"
+        "generador": "🧠 Gerador de Ideias Táticas",
+        "pass_gen": "🔑 Gerador de Senhas Seguras",
+        "matrix": "💻 Visualizador Matriz"
     }
 }
 
@@ -277,7 +285,6 @@ with col_i:
     st.caption(f"🔒 Enlace: **{modo_starlink}**")
     st.markdown('</div>', unsafe_allow_html=True)
 
-    # 💻 LOCURA NOVA 1: Terminal de Comandos Hacker / Autodiagnóstico
     st.markdown('<div class="card-tactica">', unsafe_allow_html=True)
     st.subheader(tn["terminal"])
     st.markdown("""
@@ -303,8 +310,8 @@ with col_c:
             st.toast("🚨 Consola purgada y reseteada.")
             st.rerun()
 
-    st.markdown('<div class="card-tactica">', unsafe_allow_html=True)
-    st.subheader(tn["escaner"])
+    st.markdown('<div class="card-tactica" style="padding: 10px !important;">', unsafe_allow_html=True)
+    st.markdown("👁️ **Escáner Táctico de Cámara:**")
     img_cam = st.camera_input("Capturar objeto para auditoría táctica:")
     if img_cam:
         st.success("📸 Captura recibida con éxito.")
@@ -377,7 +384,6 @@ with col_d:
             st.error("❌ PIN incorrecto.")
     st.markdown('</div>', unsafe_allow_html=True)
 
-    # 🧠 LOCURA NOVA 2: Generador Táctico de Ideas de Proyectos
     st.markdown('<div class="card-tactica">', unsafe_allow_html=True)
     st.subheader(tn["generador"])
     idea_base = st.text_input("Concepto de Proyecto:", placeholder="Ej: Automatizar riego...", key="idea_nova")
@@ -387,6 +393,29 @@ with col_d:
             st.markdown(f"- **Fase 1:** Análisis de requerimientos para *{idea_base}*.\n- **Fase 2:** Prototipado y testeo en taller.\n- **Fase 3:** Despliegue en red segura.")
         else:
             st.warning("⚠️ Ingrese un concepto base.")
+    st.markdown('</div>', unsafe_allow_html=True)
+
+    # 🔑 NUEVA ADICIÓN NOVA 1: Generador Táctico de Contraseñas / Cifrado
+    st.markdown('<div class="card-tactica">', unsafe_allow_html=True)
+    st.subheader(tn["pass_gen"])
+    long_pass = st.slider("Longitud de Clave:", 8, 24, 14, key="pass_len")
+    if st.button("🔐 Generar Clave Segura"):
+        chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*"
+        nueva_clave = "".join(random.choice(chars) for _ in range(long_pass))
+        st.code(nueva_clave, language="")
+        st.toast("✅ Llave de cifrado generada con éxito.")
+    st.markdown('</div>', unsafe_allow_html=True)
+
+    # 💻 NUEVA ADICIÓN NOVA 2: Efecto Visual Matriz / Consola Animada Ciberpunk
+    st.markdown('<div class="card-tactica">', unsafe_allow_html=True)
+    st.subheader(tn["matrix"])
+    st.markdown("""
+    <div style="background:#000; color:#00ff66; border:1px solid #00ff66; border-radius:6px; padding:8px; font-family:monospace; font-size:10px; text-align:center;">
+        01010011 01011001 01010011 01010100 01000101 01001101<br>
+        [STREAM_SECURE_ACTIVE // N.T.C. PROTOCOL]<br>
+        00110010 00110000 00110010 00110110
+    </div>
+    """, unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
     st.markdown('<div class="card-tactica">', unsafe_allow_html=True)
