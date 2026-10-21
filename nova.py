@@ -40,9 +40,29 @@ def guardar_memoria_nova(datos):
 
 memoria_nova = cargar_memoria_nova()
 
-# Configuración de idioma táctico en la barra lateral
+# Barra lateral: Idioma y 🚨 2. Indicador de Nivel de Amenaza (DEFCON / Neón)
 st.sidebar.markdown("### 🛡️ Protocolo de Seguridad")
 idioma_n = st.sidebar.selectbox("Idioma Táctico:", ["Español 🇨🇱", "English 🇺🇸", "Français 🇫🇷", "Português 🇧🇷"], key="lang_n")
+
+nivel_amenaza = st.sidebar.radio(
+    "🚨 Estado de Amenaza Táctica:",
+    ["🟦 DEFCON 5 (Normal)", "🟧 DEFCON 3 (Intensivo)", "🟥 DEFCON 1 (Alerta Máxima)"],
+    index=0
+)
+
+# Configuración de Colores de Neón según Nivel DEFCON
+if "DEFCON 1" in nivel_amenaza:
+    color_neon = "#ff0055" # Rojo Ciberpunk
+    sombra_neon = "rgba(255, 0, 85, 0.8)"
+    bg_card = "#140005"
+elif "DEFCON 3" in nivel_amenaza:
+    color_neon = "#ffaa00" # Naranja Táctico
+    sombra_neon = "rgba(255, 170, 0, 0.8)"
+    bg_card = "#140a00"
+else:
+    color_neon = "#00f3ff" # Azul Neón Estándar
+    sombra_neon = "rgba(0, 243, 255, 0.8)"
+    bg_card = "#000a12"
 
 textos_nova = {
     "Español 🇨🇱": {
@@ -55,7 +75,8 @@ textos_nova = {
         "starlink": "🛰️ Enlace Satelital Starlink",
         "panico": "🚨 Protocolo Cero",
         "boveda": "🔐 Notas Confidenciales",
-        "auditoria": "📋 Auditoría de Eventos"
+        "auditoria": "📋 Auditoría de Eventos",
+        "escaner": "👁️ Escáner Táctico de Cámara"
     },
     "English 🇺🇸": {
         "titulo": "🛡️ N.O.V.A (C.I.T) // TACTICAL INTELLIGENCE CENTER 🛡️",
@@ -67,7 +88,8 @@ textos_nova = {
         "starlink": "🛰️ Starlink Satellite Link",
         "panico": "🚨 Protocol Zero",
         "boveda": "🔐 Confidential Vault",
-        "auditoria": "📋 Event Audit"
+        "auditoria": "📋 Event Audit",
+        "escaner": "👁️ Tactical Camera Scanner"
     },
     "Français 🇫🇷": {
         "titulo": "🛡️ N.O.V.A (C.I.T) // CENTRE D'INTELLIGENCE TACTIQUE 🛡️",
@@ -79,7 +101,8 @@ textos_nova = {
         "starlink": "🛰️ Liaison Satellite Starlink",
         "panico": "🚨 Protocole Zéro",
         "boveda": "🔐 Coffre Confidentiel",
-        "auditoria": "📋 Audit des Événements"
+        "auditoria": "📋 Audit des Événements",
+        "escaner": "👁️ Scanner Tactique Caméra"
     },
     "Português 🇧🇷": {
         "titulo": "🛡️ N.O.V.A (C.I.T) // CENTRO DE INTELIGÊNCIA TÁTICA 🛡️",
@@ -91,88 +114,89 @@ textos_nova = {
         "starlink": "🛰️ Enlace Satelital Starlink",
         "panico": "🚨 Protocolo Zero",
         "boveda": "🔐 Cofre Confidencial",
-        "auditoria": "📋 Auditoria de Eventos"
+        "auditoria": "📋 Auditoria de Eventos",
+        "escaner": "👁️ Scanner Tático de Câmera"
     }
 }
 
 tn = textos_nova[idioma_n]
 
-# Estilos CSS Neón Azul / Blindaje Táctico
-st.markdown("""
+# Estilos CSS Neón Dinámico
+st.markdown(f"""
     <style>
-    .stApp, .main, [data-testid="stAppViewContainer"], [data-testid="stHeader"] {
+    .stApp, .main, [data-testid="stAppViewContainer"], [data-testid="stHeader"] {{
         background-color: #000000 !important;
-    }
-    h1 {
+    }}
+    h1 {{
         text-align: center !important;
-        color: #00f3ff !important;
-        text-shadow: 0px 0px 12px rgba(0, 243, 255, 0.8);
+        color: {color_neon} !important;
+        text-shadow: 0px 0px 12px {sombra_neon};
         font-size: 28px !important;
         width: 100% !important;
         display: block !important;
-    }
-    h3 {
-        color: #00f3ff !important;
-        text-shadow: 0px 0px 8px rgba(0, 243, 255, 0.6);
+    }}
+    h3 {{
+        color: {color_neon} !important;
+        text-shadow: 0px 0px 8px {sombra_neon};
         margin-top: 0px !important;
-    }
-    p, span, label, div, markdown, .stMarkdown {
-        color: #80f9ff !important;
-    }
-    .card-tactica {
-        background-color: #000a12 !important;
-        border: 1px solid #00f3ff !important;
+    }}
+    p, span, label, div, markdown, .stMarkdown {{
+        color: {color_neon} !important;
+    }}
+    .card-tactica {{
+        background-color: {bg_card} !important;
+        border: 1px solid {color_neon} !important;
         border-radius: 10px !important;
         padding: 16px !important;
         margin-bottom: 20px !important;
-        box-shadow: 0px 0px 10px rgba(0, 243, 255, 0.3) !important;
-    }
-    .reloj-digital {
+        box-shadow: 0px 0px 10px {sombra_neon} !important;
+    }}
+    .reloj-digital {{
         background-color: #000000 !important;
-        color: #00f3ff !important;
-        border: 1px solid #00f3ff !important;
+        color: {color_neon} !important;
+        border: 1px solid {color_neon} !important;
         border-radius: 6px !important;
-        box-shadow: 0px 0px 8px rgba(0, 243, 255, 0.4) !important;
+        box-shadow: 0px 0px 8px {sombra_neon} !important;
         font-size: 20px !important;
         padding: 4px 10px !important;
         font-family: monospace;
         display: inline-block;
-    }
-    div[data-testid="stChatMessage"] {
-        background-color: #000a12 !important;
-        border: 1px solid #00f3ff !important;
+    }}
+    div[data-testid="stChatMessage"] {{
+        background-color: {bg_card} !important;
+        border: 1px solid {color_neon} !important;
         border-radius: 8px !important;
-        box-shadow: 0px 0px 6px rgba(0, 243, 255, 0.3);
+        box-shadow: 0px 0px 6px {sombra_neon};
         margin-bottom: 10px;
-    }
-    div[data-testid="stChatMessage"] * {
-        color: #00f3ff !important;
-    }
-    .banner-ondas {
+    }}
+    div[data-testid="stChatMessage"] * {{
+        color: {color_neon} !important;
+    }}
+    .banner-ondas {{
         width: 100%;
         height: 60px;
         background: linear-gradient(90deg, #000000 0%, #031525 50%, #000000 100%);
-        border: 1px solid #00f3ff;
+        border: 1px solid {color_neon};
         border-radius: 8px;
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0px 0px 15px rgba(0, 243, 255, 0.4);
+        box-shadow: 0px 0px 15px {sombra_neon};
         margin-bottom: 20px;
         text-align: center;
-    }
-    .stButton>button {
-        background-color: #000a12 !important;
-        color: #00f3ff !important;
-        border: 1px solid #00f3ff !important;
+    }}
+    .stButton>button {{
+        background-color: {bg_card} !important;
+        color: {color_neon} !important;
+        border: 1px solid {color_neon} !important;
         border-radius: 6px;
-        box-shadow: 0px 0px 6px rgba(0, 243, 255, 0.4);
+        box-shadow: 0px 0px 6px {sombra_neon};
         width: 100%;
-    }
-    .stButton>button:hover {
-        background-color: #00f3ff !important;
+    }}
+    .stButton>button:hover {{
+        background-color: {color_neon} !important;
         color: #000000 !important;
-    }
+    }}
     </style>
 """, unsafe_allow_html=True)
 
@@ -195,8 +219,8 @@ def emitir_voz_nova(texto, lang_code):
 st.markdown(f"<h1>{tn['titulo']}</h1>", unsafe_allow_html=True)
 st.markdown(f"""
     <div class="banner-ondas">
-        <span style="font-size: 13px; color: #00f3ff; font-family: monospace; letter-spacing: 2px;">
-            {tn['sub']}
+        <span style="font-size: 13px; color: {color_neon}; font-family: monospace; letter-spacing: 2px;">
+            {tn['sub']} // ESTADO: {nivel_amenaza.split()[1]}
         </span>
     </div>
 """, unsafe_allow_html=True)
@@ -205,7 +229,6 @@ st.markdown("---")
 col_i, col_c, col_d = st.columns([1.1, 2.2, 1.1])
 
 with col_i:
-    # 1. Reloj Táctico
     st.markdown('<div class="card-tactica">', unsafe_allow_html=True)
     st.subheader(tn["tiempo"])
     @st.fragment(run_every=1)
@@ -218,7 +241,6 @@ with col_i:
     reloj_nova()
     st.markdown('</div>', unsafe_allow_html=True)
     
-    # 2. Monitoreo de Hardware
     st.markdown('<div class="card-tactica">', unsafe_allow_html=True)
     st.subheader(tn["red"])
     if psutil:
@@ -228,14 +250,12 @@ with col_i:
         st.write("⚙️ **CPU:** `12%` | 🧠 **RAM:** `38%`")
     st.markdown('</div>', unsafe_allow_html=True)
 
-    # 3. Módulo Starlink (SpaceX)
     st.markdown('<div class="card-tactica">', unsafe_allow_html=True)
     st.subheader(tn["starlink"])
     st.write("📡 **Antena Dishy:** `Alineada (Online)`")
     st.write("🚀 **Satélite LEO:** `STARLINK-3142`")
     st.write("⚡ **Bajada / Subida:** `215 Mbps / 38 Mbps`")
     st.write("⏱️ **Ping Orbital:** `18 ms`")
-    
     modo_starlink = st.selectbox("Modo de Enlace:", ["Prioridad Terrestre", "Cifrado Militar LEO", "Modo Sigilo (Bajo Consumo)"], key="sl_mode")
     st.caption(f"🔒 Enlace: **{modo_starlink}**")
     st.markdown('</div>', unsafe_allow_html=True)
@@ -243,6 +263,19 @@ with col_i:
 with col_c:
     st.subheader("💬 Consola Táctica // N.O.V.A. (C.I.T.)")
     
+    # 👁️ 1. Módulo de Visión y Escáner Táctico (Cámara)
+    st.markdown('<div class="card-tactica">', unsafe_allow_html=True)
+    st.subheader(tn["escaner"])
+    img_cam = st.camera_input("Capturar objeto para auditoría táctica:")
+    if img_cam:
+        st.success("📸 Captura recibida con éxito.")
+        if st.button("🔍 Auditar Imagen Escaneada"):
+            nuevo_ev = {"Hora": datetime.now().strftime("%H:%M:%S"), "Evento": "Escáner Visual Táctico", "Estado": "ANALIZADO"}
+            memoria_nova["auditoria"].append(nuevo_ev)
+            guardar_memoria_nova(memoria_nova)
+            st.toast("✅ Imagen registrada en la auditoría táctica.")
+    st.markdown('</div>', unsafe_allow_html=True)
+
     if "msgs_n" not in st.session_state:
         st.session_state.msgs_n = [{"role": "assistant", "content": tn["presentacion"]}]
 
@@ -257,9 +290,10 @@ with col_c:
         st.session_state.msgs_n.append({"role": "user", "content": prompt})
         
         texto_lower = prompt.lower().strip()
+        saludos = ["hola", "hello", "bonjour", "olá", "saludos", "buenas"]
+        preguntas_estado = ["cómo estás", "como estas", "how are you", "comment vas-tu", "estado", "reporte"]
         
-        # Reconocimiento de saludos y respuestas fluidas en varios idiomas
-        if any(w in texto_lower for w in ["hola", "hello", "bonjour", "olá", "saludos"]):
+        if any(s in texto_lower for s in saludos):
             if idioma_n == "English 🇺🇸":
                 resp_n = "REPORT: Greeting acknowledged. N.O.V.A. online and armed via Starlink. What is our directive, Boss?"
             elif idioma_n == "Français 🇫🇷":
@@ -269,18 +303,18 @@ with col_c:
             else:
                 resp_n = "INFORME: Saludo recibido. N.O.V.A. en línea y pertrechada vía Starlink. ¿Qué directiva ejecutamos, Jefa?"
                 
-        elif any(w in texto_lower for w in ["cómo estás", "how are you", "comment vas-tu", "como vai"]):
-            resp_n = "ESTADO TÁCTICO: Perímetros seguros, latencia Starlink en 18ms y encriptación cuántica al 100%."
+        elif any(p in texto_lower for p in preguntas_estado):
+            resp_n = f"ESTADO TÁCTICO: Nivel {nivel_amenaza.split()[1]} activo, latencia Starlink en 18ms y encriptación al 100%."
             
         else:
             if idioma_n == "English 🇺🇸":
-                resp_n = f"TACTICAL REPORT: Directive '{prompt}' verified via LEO network. Perimeter clear."
+                resp_n = f"TACTICAL REPORT: Directive '{prompt}' processed via LEO network. Perimeter clear."
             elif idioma_n == "Français 🇫🇷":
-                resp_n = f"RAPPORT TACTIQUE : Directive '{prompt}' vérifiée via le réseau LEO. Périmètre sécurisé."
+                resp_n = f"RAPPORT TACTIQUE : Directive '{prompt}' traitée via le réseau LEO. Périmètre sécurisé."
             elif idioma_n == "Português 🇧🇷":
-                resp_n = f"RELATÓRIO TÁTICO: Diretriz '{prompt}' verificada via rede LEO. Perímetro seguro."
+                resp_n = f"RELATÓRIO TÁTICO: Diretriz '{prompt}' processada via rede LEO. Perímetro seguro."
             else:
-                resp_n = f"INFORME TÁCTICO: Directiva '{prompt}' registrada vía red LEO Starlink sin anomalías."
+                resp_n = f"INFORME TÁCTICO: Directiva '{prompt}' procesada sin anomalías."
 
         st.session_state.msgs_n.append({"role": "assistant", "content": resp_n})
         
@@ -292,7 +326,6 @@ with col_c:
         st.rerun()
 
 with col_d:
-    # Protocolo Cero (Botón de Pánico)
     st.markdown('<div class="card-tactica">', unsafe_allow_html=True)
     st.subheader(tn["panico"])
     pin_p = st.text_input("PIN de Emergencia:", type="password", key="pin_p")
@@ -305,7 +338,6 @@ with col_d:
             st.error("❌ PIN incorrecto.")
     st.markdown('</div>', unsafe_allow_html=True)
 
-    # Bóveda de Notas Confidenciales
     st.markdown('<div class="card-tactica">', unsafe_allow_html=True)
     st.subheader(tn["boveda"])
     if "boveda_abierta" not in st.session_state:
@@ -336,7 +368,6 @@ with col_d:
                 st.rerun()
     st.markdown('</div>', unsafe_allow_html=True)
 
-    # Auditoría de Eventos
     st.markdown('<div class="card-tactica">', unsafe_allow_html=True)
     st.subheader(tn["auditoria"])
     for ev in reversed(memoria_nova["auditoria"][-3:]):
