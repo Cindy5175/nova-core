@@ -28,7 +28,7 @@ def cargar_memoria_nova():
             pass
     return {
         "auditoria": [{"Hora": datetime.now().strftime("%H:%M:%S"), "Evento": "Sistema Inicializado", "Estado": "SEGURO"}],
-        "nota_segura": "DATOS CONFIDENCIALES: Claves de acceso secundarias del taller."
+        "nota_segura": "DATOS CONFIDENCIALES: Claves de acceso."
     }
 
 def guardar_memoria_nova(datos):
@@ -40,19 +40,17 @@ def guardar_memoria_nova(datos):
 
 memoria_nova = cargar_memoria_nova()
 
-# Configuración de idioma táctico en la barra lateral
-st.sidebar.markdown("### 🛡️ Protocolo de Seguridad")
-idioma_n = st.sidebar.selectbox("Idioma Táctico:", ["Español 🇨🇱", "English 🇺🇸", "Français 🇫🇷", "Português 🇧🇷"], key="lang_n")
+st.sidebar.markdown("### 🛡️ Secure Protocol")
+idioma_n = st.sidebar.selectbox("Tactical Language:", ["Español 🇨🇱", "English 🇺🇸", "Français 🇫🇷", "Português 🇧🇷"], key="lang_n")
 
 textos_nova = {
     "Español 🇨🇱": {
         "titulo": "🛡️ N.O.V.A (C.I.T) // CENTRO DE INTELIGENCIA TÁCTICA 🛡️",
         "sub": "[ NÚCLEO BLINDADO & INTELIGENCIA TÁCTICA ]",
-        "presentacion": "Saludos, Jefa. Soy N.O.V.A., operando bajo Nivel de Blindaje Máximo N.T.C. Enlace Starlink activo. ¿Qué directiva protegida ejecutamos hoy?",
+        "presentacion": "Saludos, Jefa. N.O.V.A. operativa bajo Nivel de Blindaje Máximo. ¿Qué directiva protegida ejecutamos?",
         "input": "Ingrese consulta o directiva táctica...",
         "tiempo": "📅 Sincronización Temporal",
         "red": "🌐 Red y Hardware",
-        "starlink": "🛰️ Enlace Satelital Starlink",
         "panico": "🚨 Protocolo Cero",
         "boveda": "🔐 Notas Confidenciales",
         "auditoria": "📋 Auditoría de Eventos"
@@ -60,11 +58,10 @@ textos_nova = {
     "English 🇺🇸": {
         "titulo": "🛡️ N.O.V.A (C.I.T) // TACTICAL INTELLIGENCE CENTER 🛡️",
         "sub": "[ ARMORED CORE & TACTICAL INTELLIGENCE ]",
-        "presentacion": "Greetings, Boss. I am N.O.V.A., operating under Maximum N.T.C. Armor. Starlink link online. What protected directive shall we execute today?",
+        "presentacion": "Greetings, Boss. N.O.V.A. active under Maximum Armor Level. What protected directive shall we execute?",
         "input": "Enter tactical query or directive...",
         "tiempo": "📅 Temporal Synchronization",
         "red": "🌐 Network & Hardware",
-        "starlink": "🛰️ Starlink Satellite Link",
         "panico": "🚨 Protocol Zero",
         "boveda": "🔐 Confidential Vault",
         "auditoria": "📋 Event Audit"
@@ -72,11 +69,10 @@ textos_nova = {
     "Français 🇫🇷": {
         "titulo": "🛡️ N.O.V.A (C.I.T) // CENTRE D'INTELLIGENCE TACTIQUE 🛡️",
         "sub": "[ NOYAU BLINDÉ & INTELLIGENCE TACTIQUE ]",
-        "presentacion": "Salutations, Chef. Je suis N.O.V.A., sous blindage maximal. Liaison Starlink active. Quelle directive protégeons-nous aujourd'hui ?",
-        "input": "Entrez une requête ou directive tactique...",
+        "presentacion": "Salutations, Chef. N.O.V.A. active sous blindage maximal. Quelle directive protégeons-nous ?",
+        "input": "Entrez une requête tactique...",
         "tiempo": "📅 Synchronisation Temporelle",
         "red": "🌐 Réseau & Matériel",
-        "starlink": "🛰️ Liaison Satellite Starlink",
         "panico": "🚨 Protocole Zéro",
         "boveda": "🔐 Coffre Confidentiel",
         "auditoria": "📋 Audit des Événements"
@@ -84,11 +80,10 @@ textos_nova = {
     "Português 🇧🇷": {
         "titulo": "🛡️ N.O.V.A (C.I.T) // CENTRO DE INTELIGÊNCIA TÁTICA 🛡️",
         "sub": "[ NÚCLEO BLINDADO & INTELIGÊNCIA TÁTICA ]",
-        "presentacion": "Saudações, Chefe. Sou N.O.V.A., operando sob Nível de Blindagem Máxima. Enlace Starlink ativo. Qual diretriz protegida executamos hoje?",
+        "presentacion": "Saudações, Chefe. N.O.V.A. ativa sob Nível de Blindagem Máxima. Qual diretriz protegida executamos?",
         "input": "Insira consulta ou diretriz tática...",
         "tiempo": "📅 Sincronização Temporal",
         "red": "🌐 Rede e Hardware",
-        "starlink": "🛰️ Enlace Satelital Starlink",
         "panico": "🚨 Protocolo Zero",
         "boveda": "🔐 Cofre Confidencial",
         "auditoria": "📋 Auditoria de Eventos"
@@ -97,7 +92,7 @@ textos_nova = {
 
 tn = textos_nova[idioma_n]
 
-# Estilos CSS Neón Azul / Blindaje Táctico
+# Estilos CSS Neón Azul / Blindaje
 st.markdown("""
     <style>
     .stApp, .main, [data-testid="stAppViewContainer"], [data-testid="stHeader"] {
@@ -205,7 +200,6 @@ st.markdown("---")
 col_i, col_c, col_d = st.columns([1.1, 2.2, 1.1])
 
 with col_i:
-    # 1. Reloj Táctico
     st.markdown('<div class="card-tactica">', unsafe_allow_html=True)
     st.subheader(tn["tiempo"])
     @st.fragment(run_every=1)
@@ -213,35 +207,20 @@ with col_i:
         z = pytz.timezone('America/Santiago')
         ahora = datetime.now(z)
         st.write(f"📌 **Fecha:** {ahora.strftime('%d/%m/%Y')}")
-        st.markdown("⏱️ **Hora (Chile):**")
+        st.markdown("⏱️ **Hora:**")
         st.markdown(f'<div class="reloj-digital">{ahora.strftime("%H:%M:%S")}</div>', unsafe_allow_html=True)
     reloj_nova()
     st.markdown('</div>', unsafe_allow_html=True)
     
-    # 2. Monitoreo de Hardware
     st.markdown('<div class="card-tactica">', unsafe_allow_html=True)
     st.subheader(tn["red"])
+    st.write("🛰️ **Cloud:** `Online` | ⚡ **Lat:** `18ms`")
     if psutil:
-        st.write(f"⚙️ **CPU:** `{psutil.cpu_percent()}%`")
-        st.write(f"🧠 **RAM:** `{psutil.virtual_memory().percent}%`")
-    else:
-        st.write("⚙️ **CPU:** `12%` | 🧠 **RAM:** `38%`")
-    st.markdown('</div>', unsafe_allow_html=True)
-
-    # 3. Módulo Starlink (SpaceX)
-    st.markdown('<div class="card-tactica">', unsafe_allow_html=True)
-    st.subheader(tn["starlink"])
-    st.write("📡 **Antena Dishy:** `Alineada (Online)`")
-    st.write("🚀 **Satélite LEO:** `STARLINK-3142`")
-    st.write("⚡ **Bajada / Subida:** `215 Mbps / 38 Mbps`")
-    st.write("⏱️ **Ping Orbital:** `18 ms`")
-    
-    modo_starlink = st.selectbox("Modo de Enlace:", ["Prioridad Terrestre", "Cifrado Militar LEO", "Modo Sigilo (Bajo Consumo)"], key="sl_mode")
-    st.caption(f"🔒 Enlace: **{modo_starlink}**")
+        st.write(f"⚙️ **CPU:** `{psutil.cpu_percent()}%` | 🧠 **RAM:** `{psutil.virtual_memory().percent}%`")
     st.markdown('</div>', unsafe_allow_html=True)
 
 with col_c:
-    st.subheader("💬 Consola Táctica // N.O.V.A. (C.I.T.)")
+    st.subheader("💬 Consola Táctica // N.O.V.A.")
     
     if "msgs_n" not in st.session_state:
         st.session_state.msgs_n = [{"role": "assistant", "content": tn["presentacion"]}]
@@ -256,35 +235,18 @@ with col_c:
     if prompt := st.chat_input(tn["input"]):
         st.session_state.msgs_n.append({"role": "user", "content": prompt})
         
-        texto_lower = prompt.lower().strip()
-        
-        # Reconocimiento de saludos y respuestas fluidas en varios idiomas
-        if any(w in texto_lower for w in ["hola", "hello", "bonjour", "olá", "saludos"]):
-            if idioma_n == "English 🇺🇸":
-                resp_n = "REPORT: Greeting acknowledged. N.O.V.A. online and armed via Starlink. What is our directive, Boss?"
-            elif idioma_n == "Français 🇫🇷":
-                resp_n = "RAPPORT : Salutations reçues. N.O.V.A. en ligne et parée via Starlink. Quelle est notre directive, Chef ?"
-            elif idioma_n == "Português 🇧🇷":
-                resp_n = "RELATÓRIO: Saudação recebida. N.O.V.A. online via Starlink. Qual é a nossa diretriz, Chefe?"
-            else:
-                resp_n = "INFORME: Saludo recibido. N.O.V.A. en línea y pertrechada vía Starlink. ¿Qué directiva ejecutamos, Jefa?"
-                
-        elif any(w in texto_lower for w in ["cómo estás", "how are you", "comment vas-tu", "como vai"]):
-            resp_n = "ESTADO TÁCTICO: Perímetros seguros, latencia Starlink en 18ms y encriptación cuántica al 100%."
-            
+        if idioma_n == "English 🇺🇸":
+            resp_n = f"TACTICAL REPORT: Directive '{prompt}' verified. Perimeter secure."
+        elif idioma_n == "Français 🇫🇷":
+            resp_n = f"RAPPORT TACTIQUE : Directive '{prompt}' vérifiée. Périmètre sécurisé."
+        elif idioma_n == "Português 🇧🇷":
+            resp_n = f"RELATÓRIO TÁTICO: Diretriz '{prompt}' verificada. Perímetro seguro."
         else:
-            if idioma_n == "English 🇺🇸":
-                resp_n = f"TACTICAL REPORT: Directive '{prompt}' verified via LEO network. Perimeter clear."
-            elif idioma_n == "Français 🇫🇷":
-                resp_n = f"RAPPORT TACTIQUE : Directive '{prompt}' vérifiée via le réseau LEO. Périmètre sécurisé."
-            elif idioma_n == "Português 🇧🇷":
-                resp_n = f"RELATÓRIO TÁTICO: Diretriz '{prompt}' verificada via rede LEO. Perímetro seguro."
-            else:
-                resp_n = f"INFORME TÁCTICO: Directiva '{prompt}' registrada vía red LEO Starlink sin anomalías."
+            resp_n = f"INFORME TÁCTICO: Directiva '{prompt}' verificada. Perímetro seguro."
 
         st.session_state.msgs_n.append({"role": "assistant", "content": resp_n})
         
-        nuevo_evento = {"Hora": datetime.now().strftime("%H:%M:%S"), "Evento": f"Cmd: {prompt[:10]}...", "Estado": "VERIFICADO"}
+        nuevo_evento = {"Hora": datetime.now().strftime("%H:%M:%S"), "Evento": f"Cmd: {prompt[:10]}...", "Estado": "OK"}
         memoria_nova["auditoria"].append(nuevo_evento)
         guardar_memoria_nova(memoria_nova)
         
@@ -292,53 +254,34 @@ with col_c:
         st.rerun()
 
 with col_d:
-    # Protocolo Cero (Botón de Pánico)
     st.markdown('<div class="card-tactica">', unsafe_allow_html=True)
     st.subheader(tn["panico"])
-    pin_p = st.text_input("PIN de Emergencia:", type="password", key="pin_p")
-    if st.button("🔴 EJECUTAR BLOQUEO"):
+    pin_p = st.text_input("PIN:", type="password", key="pin_p")
+    if st.button("🔴 LOCKDOWN"):
         if pin_p == "1234":
-            st.session_state.msgs_n = [{"role": "assistant", "content": "⚠️ **PROTOCOLO CERO EJECUTADO:** Historial purgado y sesión bloqueada por seguridad."}]
-            st.toast("🚨 ¡Sistema blindado y purgado con éxito!")
+            st.session_state.msgs_n = [{"role": "assistant", "content": "⚠️ PROTOCOL ZERO EXECUTED."}]
             st.rerun()
         else:
-            st.error("❌ PIN incorrecto.")
+            st.error("Error")
     st.markdown('</div>', unsafe_allow_html=True)
 
-    # Bóveda de Notas Confidenciales
     st.markdown('<div class="card-tactica">', unsafe_allow_html=True)
     st.subheader(tn["boveda"])
-    if "boveda_abierta" not in st.session_state:
-        st.session_state.boveda_abierta = False
-
-    if not st.session_state.boveda_abierta:
-        pin_c = st.text_input("PIN de Bóveda:", type="password", key="pin_conf")
-        if st.button("🔓 Desbloquear Bóveda"):
-            if pin_c == "1234":
-                st.session_state.boveda_abierta = True
-                st.toast("✅ ¡Bóveda desbloqueada!")
-                st.rerun()
-            else:
-                st.error("❌ PIN incorrecto.")
+    if "bov" not in st.session_state: st.session_state.bov = False
+    if not st.session_state.bov:
+        pin_c = st.text_input("PIN Vault:", type="password", key="pin_c")
+        if st.button("🔓 Unlock"):
+            if pin_c == "1234": st.session_state.bov = True; st.rerun()
     else:
-        st.success("🟢 Bóveda abierta")
-        nota_seg = memoria_nova.get("nota_segura", "")
-        n_seg = st.text_area("Editar datos seguros:", value=nota_seg, height=90, key="nota_seg")
-        col_ba1, col_ba2 = st.columns(2)
-        with col_ba1:
-            if st.button("💾 Guardar"):
-                memoria_nova["nota_segura"] = n_seg
-                guardar_memoria_nova(memoria_nova)
-                st.toast("✅ Datos guardados.")
-        with col_ba2:
-            if st.button("🔒 Bloquear"):
-                st.session_state.boveda_abierta = False
-                st.rerun()
+        st.success("Vault Open")
+        nota_seg = st.text_area("Secure data:", value=memoria_nova.get("nota_segura",""), key="ns")
+        if st.button("💾 Save"):
+            memoria_nova["nota_segura"] = nota_seg
+            guardar_memoria_nova(memoria_nova)
     st.markdown('</div>', unsafe_allow_html=True)
 
-    # Auditoría de Eventos
     st.markdown('<div class="card-tactica">', unsafe_allow_html=True)
     st.subheader(tn["auditoria"])
     for ev in reversed(memoria_nova["auditoria"][-3:]):
-        st.caption(f"[{ev['Hora']}] {ev['Evento']} - **{ev['Estado']}**")
+        st.caption(f"[{ev['Hora']}] {ev['Evento']}")
     st.markdown('</div>', unsafe_allow_html=True)
