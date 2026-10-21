@@ -76,7 +76,9 @@ textos_nova = {
         "panico": "🚨 Protocolo Cero",
         "boveda": "🔐 Notas Confidenciales",
         "auditoria": "📋 Auditoría de Eventos",
-        "escaner": "👁️ Escáner Táctico de Cámara"
+        "escaner": "👁️ Escáner Táctico de Cámara",
+        "terminal": "💻 Terminal de Autodiagnóstico",
+        "generador": "🧠 Generador Táctico de Ideas"
     },
     "English 🇺🇸": {
         "titulo": "🛡️ N.O.V.A (C.I.T) // TACTICAL INTELLIGENCE CENTER 🛡️",
@@ -89,7 +91,9 @@ textos_nova = {
         "panico": "🚨 Protocol Zero",
         "boveda": "🔐 Confidential Vault",
         "auditoria": "📋 Event Audit",
-        "escaner": "👁️ Tactical Camera Scanner"
+        "escaner": "👁️ Tactical Camera Scanner",
+        "terminal": "💻 Diagnostic Terminal",
+        "generador": "🧠 Tactical Idea Generator"
     },
     "Français 🇫🇷": {
         "titulo": "🛡️ N.O.V.A (C.I.T) // CENTRE D'INTELLIGENCE TACTIQUE 🛡️",
@@ -102,7 +106,9 @@ textos_nova = {
         "panico": "🚨 Protocole Zéro",
         "boveda": "🔐 Coffre Confidentiel",
         "auditoria": "📋 Audit des Événements",
-        "escaner": "👁️ Scanner Tactique Caméra"
+        "escaner": "👁️ Scanner Tactique Caméra",
+        "terminal": "💻 Terminal de Diagnostic",
+        "generador": "🧠 Générateur d'Idées Tactic"
     },
     "Português 🇧🇷": {
         "titulo": "🛡️ N.O.V.A (C.I.T) // CENTRO DE INTELIGÊNCIA TÁTICA 🛡️",
@@ -115,15 +121,15 @@ textos_nova = {
         "panico": "🚨 Protocolo Zero",
         "boveda": "🔐 Cofre Confidencial",
         "auditoria": "📋 Auditoria de Eventos",
-        "escaner": "👁️ Scanner Tático de Câmera"
+        "escaner": "👁️ Scanner Tático de Câmera",
+        "terminal": "💻 Terminal de Diagnóstico",
+        "generador": "🧠 Gerador de Ideias Táticas"
     }
 }
 
 tn = textos_nova[idioma_n]
 
-# Estilos CSS Neón Dinámico
-st.markdown(f"""
-    <style>
+css_estilo_nova = f"""
     .stApp, .main, [data-testid="stAppViewContainer"], [data-testid="stHeader"] {{
         background-color: #000000 !important;
     }}
@@ -197,8 +203,19 @@ st.markdown(f"""
         background-color: {color_neon} !important;
         color: #000000 !important;
     }}
-    </style>
-""", unsafe_allow_html=True)
+    .terminal-hacker {{
+        background-color: #050505;
+        color: #00ff66;
+        border: 1px solid #00ff66;
+        border-radius: 6px;
+        padding: 10px;
+        font-family: monospace;
+        font-size: 11px;
+        height: 110px;
+        overflow-y: auto;
+    }}
+"""
+st.markdown(f"<style>{css_estilo_nova}</style>", unsafe_allow_html=True)
 
 def emitir_voz_nova(texto, lang_code):
     lang_map = {"Español 🇨🇱": "es-ES", "English 🇺🇸": "en-US", "Français 🇫🇷": "fr-FR", "Português 🇧🇷": "pt-BR"}
@@ -260,8 +277,23 @@ with col_i:
     st.caption(f"🔒 Enlace: **{modo_starlink}**")
     st.markdown('</div>', unsafe_allow_html=True)
 
+    # 💻 LOCURA NOVA 1: Terminal de Comandos Hacker / Autodiagnóstico
+    st.markdown('<div class="card-tactica">', unsafe_allow_html=True)
+    st.subheader(tn["terminal"])
+    st.markdown("""
+    <div class="terminal-hacker">
+        > root@nova-cit:~# sys_diag --init<br>
+        [OK] Firewall cuántico activo.<br>
+        [OK] Encriptación AES-256 verificada.<br>
+        [OK] Escaneo de puertos del taller: 0 amenazas.<br>
+        > Estado: Conexión LEO estable (18ms).
+    </div>
+    """, unsafe_allow_html=True)
+    if st.button("🔄 Ejecutar Scan de Red"):
+        st.toast("🛡️ Autodiagnóstico de red completado sin anomalías.")
+    st.markdown('</div>', unsafe_allow_html=True)
+
 with col_c:
-    # Encabezado Táctico con Botón de Purga compacto
     col_titulo_n, col_purga_n = st.columns([3, 1])
     with col_titulo_n:
         st.subheader("💬 Consola Táctica // N.O.V.A.")
@@ -271,7 +303,6 @@ with col_c:
             st.toast("🚨 Consola purgada y reseteada.")
             st.rerun()
 
-    # Módulo de Visión y Escáner Táctico (Cámara)
     st.markdown('<div class="card-tactica">', unsafe_allow_html=True)
     st.subheader(tn["escaner"])
     img_cam = st.camera_input("Capturar objeto para auditoría táctica:")
@@ -344,6 +375,18 @@ with col_d:
             st.rerun()
         else:
             st.error("❌ PIN incorrecto.")
+    st.markdown('</div>', unsafe_allow_html=True)
+
+    # 🧠 LOCURA NOVA 2: Generador Táctico de Ideas de Proyectos
+    st.markdown('<div class="card-tactica">', unsafe_allow_html=True)
+    st.subheader(tn["generador"])
+    idea_base = st.text_input("Concepto de Proyecto:", placeholder="Ej: Automatizar riego...", key="idea_nova")
+    if st.button("⚡ Sintetizar Estructura"):
+        if idea_base:
+            st.success("🎯 Directiva estructurada en 3 fases:")
+            st.markdown(f"- **Fase 1:** Análisis de requerimientos para *{idea_base}*.\n- **Fase 2:** Prototipado y testeo en taller.\n- **Fase 3:** Despliegue en red segura.")
+        else:
+            st.warning("⚠️ Ingrese un concepto base.")
     st.markdown('</div>', unsafe_allow_html=True)
 
     st.markdown('<div class="card-tactica">', unsafe_allow_html=True)
