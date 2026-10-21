@@ -40,7 +40,7 @@ def guardar_memoria_nova(datos):
 
 memoria_nova = cargar_memoria_nova()
 
-# Barra lateral: Idioma y 🚨 2. Indicador de Nivel de Amenaza (DEFCON / Neón)
+# Barra lateral: Idioma y Nivel de Amenaza (DEFCON / Neón Dinámico)
 st.sidebar.markdown("### 🛡️ Protocolo de Seguridad")
 idioma_n = st.sidebar.selectbox("Idioma Táctico:", ["Español 🇨🇱", "English 🇺🇸", "Français 🇫🇷", "Português 🇧🇷"], key="lang_n")
 
@@ -52,15 +52,15 @@ nivel_amenaza = st.sidebar.radio(
 
 # Configuración de Colores de Neón según Nivel DEFCON
 if "DEFCON 1" in nivel_amenaza:
-    color_neon = "#ff0055" # Rojo Ciberpunk
+    color_neon = "#ff0055"  # Rojo Ciberpunk
     sombra_neon = "rgba(255, 0, 85, 0.8)"
     bg_card = "#140005"
 elif "DEFCON 3" in nivel_amenaza:
-    color_neon = "#ffaa00" # Naranja Táctico
+    color_neon = "#ffaa00"  # Naranja Táctico
     sombra_neon = "rgba(255, 170, 0, 0.8)"
     bg_card = "#140a00"
 else:
-    color_neon = "#00f3ff" # Azul Neón Estándar
+    color_neon = "#00f3ff"  # Azul Neón Estándar
     sombra_neon = "rgba(0, 243, 255, 0.8)"
     bg_card = "#000a12"
 
@@ -261,9 +261,17 @@ with col_i:
     st.markdown('</div>', unsafe_allow_html=True)
 
 with col_c:
-    st.subheader("💬 Consola Táctica // N.O.V.A. (C.I.T.)")
-    
-    # 👁️ 1. Módulo de Visión y Escáner Táctico (Cámara)
+    # Encabezado Táctico con Botón de Purga compacto
+    col_titulo_n, col_purga_n = st.columns([3, 1])
+    with col_titulo_n:
+        st.subheader("💬 Consola Táctica // N.O.V.A.")
+    with col_purga_n:
+        if st.button("🗑️ Purgar", key="purga_n", help="Purgar consola de comandos"):
+            st.session_state.msgs_n = [{"role": "assistant", "content": tn["presentacion"]}]
+            st.toast("🚨 Consola purgada y reseteada.")
+            st.rerun()
+
+    # Módulo de Visión y Escáner Táctico (Cámara)
     st.markdown('<div class="card-tactica">', unsafe_allow_html=True)
     st.subheader(tn["escaner"])
     img_cam = st.camera_input("Capturar objeto para auditoría táctica:")
