@@ -8,7 +8,7 @@ st.set_page_config(
     page_title="Stark Core - C.I.T", page_icon="🟣", layout="centered"
 )
 
-# Estilos CSS (Modo Sigilo y Magenta Táctico)
+# Estilos CSS (Forzando el magenta neón en toda la interfaz)
 st.markdown(
     """
     <style>
@@ -23,6 +23,10 @@ st.markdown(
         text-align: center;
         margin-bottom: 15px;
         letter-spacing: 1.5px;
+    }
+    /* Forzar que los encabezados y alertas de seguridad adopten el tono C.I.T */
+    h3 {
+        color: #ff007f !important;
     }
     </style>
 """,
