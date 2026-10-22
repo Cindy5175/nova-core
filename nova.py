@@ -73,11 +73,11 @@ if "tareas_nova" not in st.session_state:
 # --- PANEL LATERAL OCULTO DE NOVA ---
 with st.sidebar:
   st.markdown(
-      "<h3 style='color: #ff007f;'>🔒 Panel Táctico NOVA</h3>",
+      "<h3 style='color: #ff007f;'>🔒 Panel Táctico C.I.T</h3>",
       unsafe_allow_html=True,
   )
   nueva_tarea = st.text_input("Añadir pendiente operativo:")
-  if st.button("Registrar en NOVA"):
+  if st.button("Registrar en C.I.T"):
     if nueva_tarea:
       st.session_state.tareas_nova.append(nueva_tarea)
       st.success("Registrado.")
@@ -86,7 +86,7 @@ with st.sidebar:
   for idx, t in enumerate(st.session_state.tareas_nova):
     st.write(f"{idx+1}. {t}")
 
-  if st.button("🗑️ Limpiar Tareas NOVA"):
+  if st.button("🗑️ Limpiar Tareas C.I.T"):
     st.session_state.tareas_nova = []
     st.rerun()
 
@@ -94,16 +94,16 @@ with st.sidebar:
 if not st.session_state.authenticated_nova:
   st.markdown(
       "<h3 style='text-align: center; color: #ff007f;'>🔒 ACCESO RESTRINGIDO"
-      " — N.O.V.A.</h3>",
+      " — C.I.T</h3>",
       unsafe_allow_html=True,
   )
   st.markdown(
       "<p style='text-align: center; color: #a0a0a0;'>Emita una orden vocal"
-      " para validar su firma biométrica en el sistema NOVA.</p>",
+      " para validar su firma biométrica en el sistema C.I.T.</p>",
       unsafe_allow_html=True,
   )
 
-  audio_data = st.audio_input("🎙️ Validación de Voz para NOVA")
+  audio_data = st.audio_input("🎙️ Validación de Voz para C.I.T")
 
   if audio_data is not None:
     st.session_state.authenticated_nova = True
@@ -118,14 +118,14 @@ if not st.session_state.authenticated_nova:
         {"role": "assistant", "content": bienvenida}
     )
     reproducir_voz(bienvenida)
-    st.success("✅ [FIRMA VOCAL VALIDADA]: Acceso concedido a NOVA.")
+    st.success("✅ [FIRMA VOCAL VALIDADA]: Acceso concedido a C.I.T.")
     st.rerun()
 
 # --- MÓDULO 2: CHAT INTELIGENTE NOVA CON HOLO-TALLER ---
 else:
   st.markdown(
-      "<p style='color: #ff007f; font-weight: bold;'>🟣 NOVA OPERATIVA — C.I.T"
-      " ACTIVO</p>",
+      "<p style='color: #ff007f; font-weight: bold;'>🟣 C.I.T OPERATIVA —"
+      " SISTEMA ACTIVO</p>",
       unsafe_allow_html=True,
   )
 
@@ -133,7 +133,7 @@ else:
     with st.chat_message(message["role"]):
       st.markdown(message["content"])
       if "widget_custom" in message:
-        with st.expander("📂 Panel Desplegable NOVA (Holograma / Multimedia)"):
+        with st.expander("📂 Panel Desplegable C.I.T (Holograma / Multimedia)"):
           st.markdown(message["widget_custom"], unsafe_allow_html=True)
 
   if prompt := st.chat_input(
@@ -146,7 +146,7 @@ else:
     prompt_lower = prompt.lower().strip()
     widget_html = None
 
-    # Protocolos de NOVA
+    # Protocolos de NOVA / C.I.T
     if (
         "clean slate" in prompt_lower
         or "purga" in prompt_lower
@@ -195,7 +195,7 @@ else:
       prompt_url = urllib.parse.quote(prompt)
       widget_html = f"""
             <div style="text-align: center; border: 1px solid #ff007f; padding: 10px; border-radius: 10px; background-color: #050505;">
-                <p style="color: #ff007f; font-family: monospace; margin-bottom: 5px;">HOLO-TALLER NOVA // PROTOTIPO TÁCTICO</p>
+                <p style="color: #ff007f; font-family: monospace; margin-bottom: 5px;">HOLO-TALLER C.I.T // PROTOTIPO TÁCTICO</p>
                 <img src="https://image.pollinations.ai/prompt/{prompt_url}%20futuristic%20blueprint%20cyberpunk%20stark%20tech" width="100%" style="border-radius: 5px;">
             </div>
             """
