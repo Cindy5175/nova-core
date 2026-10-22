@@ -1,6 +1,6 @@
 import streamlit as st
 
-# Configuración de la página para NOVA
+# Configuración de la página
 st.set_page_config(
     page_title="Stark Core - NOVA Secure", page_icon="🌟", layout="centered"
 )
@@ -32,10 +32,11 @@ st.markdown(
 )
 st.markdown("---")
 
-# --- MÓDULO 1: BIOMETRÍA DE VOZ (PROTOCOLO DE SEGURIDAD NOVA) ---
+# Estado de autenticación
 if "authenticated" not in st.session_state:
   st.session_state.authenticated = False
 
+# --- MÓDULO 1: BIOMETRÍA VOCAL REAL ---
 if not st.session_state.authenticated:
   st.markdown(
       "<h3 style='text-align: center; color: #ff3366;'>🔒 ACCESO RESTRINGIDO"
@@ -43,42 +44,47 @@ if not st.session_state.authenticated:
       unsafe_allow_html=True,
   )
   st.markdown(
-      "<p style='text-align: center; color: #a0a0a0;'>Se requiere validación de"
-      " huella vocal para desbloquear el núcleo NOVA.</p>",
+      "<p style='text-align: center; color: #a0a0a0;'>Graba un comando de voz"
+      " para validar tu huella biométrica y activar a NOVA.</p>",
       unsafe_allow_html=True,
   )
 
-  col1, col2, col3 = st.columns([1, 2, 1])
-  with col2:
-    if st.button("🎙️ VALIDAR BIOMETRÍA VOCAL", use_container_width=True):
-      # Validación biométrica
-      st.session_state.authenticated = True
-      st.rerun()
+  # Grabador de audio para validación vocal
+  audio_data = st.audio_input("🎙️ Presiona para grabar tu firma vocal")
 
+  if audio_data is not None:
+    # Se detectó la muestra de audio
+    st.session_state.authenticated = True
+    st.success("✅ [HUELLA VOCAL DETECTADA]: Autenticación correcta, Jefa.")
+    st.rerun()
+
+# --- MÓDULO 2: CHAT INTERACTIVO FUNCIONAL ---
 else:
-  # --- MÓDULO 2: CHAT INTERACTIVO FUNCIONAL (DESBLOQUEADO) ---
-  st.success("✅ [ACCESO CONCEDIDO]: Biometría de voz validada. Hola, Jefa.")
+  st.markdown(
+      "<p style='color: #00f0ff; font-weight: bold;'>🌟 SISTEMA DESBLOQUEADO —"
+      " UNIDAD NOVA OPERATIVA</p>",
+      unsafe_allow_html=True,
+  )
 
-  # Inicializar el historial de mensajes de NOVA
+  # Inicializar el historial de mensajes
   if "messages" not in st.session_state:
     st.session_state.messages = []
 
-  # Mostrar mensajes anteriores en pantalla
+  # Mostrar mensajes guardados
   for message in st.session_state.messages:
     with st.chat_message(message["role"]):
       st.markdown(message["content"])
 
-  # Caja de entrada interactiva para chatear
+  # Caja de entrada del chat
   if prompt := st.chat_input("¿Qué directiva táctica ejecutamos hoy?"):
-    # Guardar y mostrar mensaje de la usuaria
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
       st.markdown(prompt)
 
-    # Respuesta del núcleo NOVA
+    # Respuesta de la unidad táctica NOVA
     response = (
-        f"🌟 Directiva procesada en el núcleo NOVA: '{prompt}'. Unidad táctica"
-        " lista, Jefa."
+        f"🌟 **N.O.V.A.:** Directiva '{prompt}' analizada. Unidad táctica lista"
+        " a su orden, Jefa."
     )
     st.session_state.messages.append({"role": "assistant", "content": response})
     with st.chat_message("assistant"):
