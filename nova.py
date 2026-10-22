@@ -5,7 +5,7 @@ import streamlit as st
 
 # Configuración de la página para NOVA
 st.set_page_config(
-    page_title="Stark Core - NOVA Holo-Taller", page_icon="🟣", layout="centered"
+    page_title="Stark Core - C.I.T", page_icon="🟣", layout="centered"
 )
 
 # Estilos CSS (Modo Sigilo y Magenta Táctico)
@@ -17,7 +17,7 @@ st.markdown(
         color: #ffffff;
     }
     .console-title {
-        color: #ff3366;
+        color: #ff007f;
         font-family: monospace;
         font-size: 16px;
         text-align: center;
@@ -30,8 +30,7 @@ st.markdown(
 )
 
 st.markdown(
-    '<p class="console-title">N.O.V.A. — NÚCLEO TÁCTICO INTEGRAL</p>',
-    unsafe_allow_html=True,
+    '<p class="console-title">N.O.V.A. — C.I.T</p>', unsafe_allow_html=True
 )
 st.markdown("---")
 
@@ -74,7 +73,7 @@ if "tareas_nova" not in st.session_state:
 # --- PANEL LATERAL OCULTO DE NOVA ---
 with st.sidebar:
   st.markdown(
-      "<h3 style='color: #ff3366;'>🔒 Panel Táctico NOVA</h3>",
+      "<h3 style='color: #ff007f;'>🔒 Panel Táctico NOVA</h3>",
       unsafe_allow_html=True,
   )
   nueva_tarea = st.text_input("Añadir pendiente operativo:")
@@ -94,7 +93,7 @@ with st.sidebar:
 # --- MÓDULO 1: BIOMETRÍA VOCAL (NOVA) ---
 if not st.session_state.authenticated_nova:
   st.markdown(
-      "<h3 style='text-align: center; color: #ff3366;'>🔒 ACCESO RESTRINGIDO"
+      "<h3 style='text-align: center; color: #ff007f;'>🔒 ACCESO RESTRINGIDO"
       " — N.O.V.A.</h3>",
       unsafe_allow_html=True,
   )
@@ -109,8 +108,8 @@ if not st.session_state.authenticated_nova:
   if audio_data is not None:
     st.session_state.authenticated_nova = True
     bienvenida = (
-        "🟣 **N.O.V.A.:** Biometría confirmada. Sistemas tácticos y"
-        " holográficos desplegados, Jefa."
+        "🟣 **N.O.V.A.:** Biometría confirmada. Sistemas C.I.T. y holográficos"
+        " desplegados, Jefa."
     )
     st.session_state.messages_nova.append(
         {"role": "user", "content": "🎙️ [Comando de Voz Válido]"}
@@ -125,8 +124,8 @@ if not st.session_state.authenticated_nova:
 # --- MÓDULO 2: CHAT INTELIGENTE NOVA CON HOLO-TALLER ---
 else:
   st.markdown(
-      "<p style='color: #ff3366; font-weight: bold;'>🟣 NOVA OPERATIVA —"
-      " HOLO-TALLER ACTIVO</p>",
+      "<p style='color: #ff007f; font-weight: bold;'>🟣 NOVA OPERATIVA — C.I.T"
+      " ACTIVO</p>",
       unsafe_allow_html=True,
   )
 
@@ -195,8 +194,8 @@ else:
       response = f"🟣 **N.O.V.A.:** Renderizando diseño táctico para: *'{prompt}'*. Desplegando plano holográfico, Jefa."
       prompt_url = urllib.parse.quote(prompt)
       widget_html = f"""
-            <div style="text-align: center; border: 1px solid #ff3366; padding: 10px; border-radius: 10px; background-color: #050505;">
-                <p style="color: #ff3366; font-family: monospace; margin-bottom: 5px;">HOLO-TALLER NOVA // PROTOTIPO TÁCTICO</p>
+            <div style="text-align: center; border: 1px solid #ff007f; padding: 10px; border-radius: 10px; background-color: #050505;">
+                <p style="color: #ff007f; font-family: monospace; margin-bottom: 5px;">HOLO-TALLER NOVA // PROTOTIPO TÁCTICO</p>
                 <img src="https://image.pollinations.ai/prompt/{prompt_url}%20futuristic%20blueprint%20cyberpunk%20stark%20tech" width="100%" style="border-radius: 5px;">
             </div>
             """
