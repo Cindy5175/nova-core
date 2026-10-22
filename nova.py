@@ -2,12 +2,12 @@ import base64
 from gtts import gTTS
 import streamlit as st
 
-# Configuración de la página en modo oculto / ancho
+# Configuración de la página para NOVA
 st.set_page_config(
-    page_title="Stark Core - Modo Oculto", page_icon="🔵", layout="centered"
+    page_title="Stark Core - NOVA Modo Oculto", page_icon="🟣", layout="centered"
 )
 
-# Estilos CSS (Modo Sigilo y Ocultamiento Inteligente)
+# Estilos CSS (Modo Sigilo y Magenta Táctico)
 st.markdown(
     """
     <style>
@@ -16,7 +16,7 @@ st.markdown(
         color: #ffffff;
     }
     .console-title {
-        color: #00f0ff;
+        color: #ff3366;
         font-family: monospace;
         font-size: 16px;
         text-align: center;
@@ -29,7 +29,8 @@ st.markdown(
 )
 
 st.markdown(
-    '<p class="console-title">J.A.R.V.I.S. — NÚCLEO EN ESPERA (MODO OCULTO)</p>',
+    '<p class="console-title">N.O.V.A. — NÚCLEO TÁCTICO EN ESPERA (MODO'
+    " OCULTO)</p>",
     unsafe_allow_html=True,
 )
 st.markdown("---")
@@ -39,14 +40,14 @@ st.markdown("---")
 def reproducir_voz(texto_limpio):
   try:
     texto_voz = (
-        texto_limpio.replace("🔵", "")
-        .replace("J.A.R.V.I.S.:", "")
+        texto_limpio.replace("🟣", "")
+        .replace("N.O.V.A.:", "")
         .replace("*", "")
         .replace("#", "")
     )
     tts = gTTS(text=texto_voz, lang="es", slow=False)
-    tts.save("voz_stark.mp3")
-    with open("voz_stark.mp3", "rb") as f:
+    tts.save("voz_nova.mp3")
+    with open("voz_nova.mp3", "rb") as f:
       audio_bytes = f.read()
     b64 = base64.b64encode(audio_bytes).decode()
     audio_html = f"""
@@ -60,76 +61,81 @@ def reproducir_voz(texto_limpio):
 
 
 # Estados de sesión
-if "authenticated" not in st.session_state:
-  st.session_state.authenticated = False
-if "messages" not in st.session_state:
-  st.session_state.messages = []
-if "tareas" not in st.session_state:
-  st.session_state.tareas = ["Calibrar blindaje", "Optimizar núcleos de IA"]
+if "authenticated_nova" not in st.session_state:
+  st.session_state.authenticated_nova = False
+if "messages_nova" not in st.session_state:
+  st.session_state.messages_nova = []
+if "tareas_nova" not in st.session_state:
+  st.session_state.tareas_nova = [
+      "Calibrar matriz táctica",
+      "Sincronizar redes",
+  ]
 
-# --- PANEL LATERAL OCULTO (Solo se despliega si se usa) ---
+# --- PANEL LATERAL OCULTO DE NOVA ---
 with st.sidebar:
   st.markdown(
-      "<h3 style='color: #00f0ff;'>🔒 Panel Táctico Oculto</h3>",
+      "<h3 style='color: #ff3366;'>🔒 Panel Táctico NOVA</h3>",
       unsafe_allow_html=True,
   )
-  with st.expander("📝 Gestionar Pendientes del Taller"):
-    nueva_tarea = st.text_input("Añadir pendiente:")
-    if st.button("Registrar"):
+  with st.expander("📝 Gestionar Pendientes Operativos"):
+    nueva_tarea = st.text_input("Añadir pendiente operativo:")
+    if st.button("Registrar en NOVA"):
       if nueva_tarea:
-        st.session_state.tareas.append(nueva_tarea)
+        st.session_state.tareas_nova.append(nueva_tarea)
         st.success("Registrado.")
 
-    for idx, t in enumerate(st.session_state.tareas):
+    for idx, t in enumerate(st.session_state.tareas_nova):
       st.write(f"{idx+1}. {t}")
 
-    if st.button("Limpiar Tareas"):
-      st.session_state.tareas = []
+    if st.button("Limpiar Tareas NOVA"):
+      st.session_state.tareas_nova = []
       st.rerun()
 
   with st.expander("⚙️ Opciones de Sistema"):
-    if st.button("🗑️ Forzar Purga Total"):
-      st.session_state.messages = []
+    if st.button("🗑️ Forzar Purga Total NOVA"):
+      st.session_state.messages_nova = []
       st.rerun()
 
-# --- MÓDULO 1: BIOMETRÍA VOCAL ---
-if not st.session_state.authenticated:
+# --- MÓDULO 1: BIOMETRÍA VOCAL (NOVA) ---
+if not st.session_state.authenticated_nova:
   st.markdown(
       "<h3 style='text-align: center; color: #ff3366;'>🔒 ACCESO RESTRINGIDO"
-      " — MODO SIGILO</h3>",
+      " — N.O.V.A.</h3>",
       unsafe_allow_html=True,
   )
   st.markdown(
-      "<p style='text-align: center; color: #a0a0a0;'>Haz una grabación de voz"
-      " para validar tu huella biométrica y activar los sistemas.</p>",
+      "<p style='text-align: center; color: #a0a0a0;'>Emita una orden vocal"
+      " para validar su firma biométrica en el sistema NOVA.</p>",
       unsafe_allow_html=True,
   )
 
-  audio_data = st.audio_input("🎙️ Presiona para hablar con el sistema")
+  audio_data = st.audio_input("🎙️ Validación de Voz para NOVA")
 
   if audio_data is not None:
-    st.session_state.authenticated = True
+    st.session_state.authenticated_nova = True
     bienvenida = (
-        "🔵 **J.A.R.V.I.S.:** Biometría aceptada, señorita. Sistemas ocultos"
-        " desplegados solo a su comando."
+        "🟣 **N.O.V.A.:** Biometría confirmada. Sistemas tácticos ocultos"
+        " desplegados a su entera disposición, Jefa."
     )
-    st.session_state.messages.append(
+    st.session_state.messages_nova.append(
         {"role": "user", "content": "🎙️ [Comando de Voz Válido]"}
     )
-    st.session_state.messages.append({"role": "assistant", "content": bienvenida})
+    st.session_state.messages_nova.append(
+        {"role": "assistant", "content": bienvenida}
+    )
     reproducir_voz(bienvenida)
-    st.success("✅ [HUELLA VOCAL DETECTADA]: Acceso concedido, Jefa.")
+    st.success("✅ [FIRMA VOCAL VALIDADA]: Acceso concedido a NOVA.")
     st.rerun()
 
-# --- MÓDULO 2: CHAT INTELIGENTE CON PANELES EXPANDIBLES ---
+# --- MÓDULO 2: CHAT INTELIGENTE NOVA ---
 else:
   st.markdown(
-      "<p style='color: #00f0ff; font-weight: bold;'>🔵 SISTEMA EN ESPERA —"
-      " INTERFAZ MINIMALISTA</p>",
+      "<p style='color: #ff3366; font-weight: bold;'>🟣 NOVA OPERATIVA —"
+      " INTERFAZ OCULTA Y FLUIDA</p>",
       unsafe_allow_html=True,
   )
 
-  for message in st.session_state.messages:
+  for message in st.session_state.messages_nova:
     with st.chat_message(message["role"]):
       st.markdown(message["content"])
       if "widget_musica" in message:
@@ -137,52 +143,66 @@ else:
           st.markdown(message["widget_musica"], unsafe_allow_html=True)
 
   if prompt := st.chat_input(
-      "¿Qué directiva ordenamos, Jefa? (Todo lo demás permanece oculto)"
+      "¿Qué directiva táctica ejecutamos, Jefa? (Modo silencioso activo)"
   ):
-    st.session_state.messages.append({"role": "user", "content": prompt})
+    st.session_state.messages_nova.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
       st.markdown(prompt)
 
     prompt_lower = prompt.lower().strip()
     widget_html = None
 
-    # Protocolos y comandos
+    # Protocolos de NOVA
     if (
         "clean slate" in prompt_lower
         or "purga" in prompt_lower
         or "emergencia" in prompt_lower
     ):
-      response = "🔵 **J.A.R.V.I.S.:** Ejecutando protocolo de purga total. Silenciando y limpiando registros, Jefa."
-      st.session_state.messages = []
+      response = (
+          "🟣 **N.O.V.A.:** Ejecutando purga táctica. Limpiando registros y"
+          " sellando frecuencias, Jefa."
+      )
+      st.session_state.messages_nova = []
       st.rerun()
     elif "clima" in prompt_lower or "buin" in prompt_lower:
-      response = "🔵 **J.A.R.V.I.S.:** Satélites en Buin reportan cielos despejados. Todo bajo control en el exterior."
+      response = (
+          "🟣 **N.O.V.A.:** Escáneres meteorológicos en Buin estables. Ninguna"
+          " anomalía en el sector."
+      )
     elif (
         "cripto" in prompt_lower
         or "mercado" in prompt_lower
         or "inversion" in prompt_lower
     ):
-      response = "🔵 **J.A.R.V.I.S.:** Analizando activos en segundo plano. Los números se mueven de forma interesante."
+      response = (
+          "🟣 **N.O.V.A.:** Monitoreo financiero en segundo plano operando sin"
+          " sobresaltos."
+      )
     elif (
         "musica" in prompt_lower
         or "cancion" in prompt_lower
         or "reproduce" in prompt_lower
         or "spotify" in prompt_lower
     ):
-      response = "🔵 **J.A.R.V.I.S.:** Desplegando el reproductor multimedia a su orden, Jefa."
+      response = (
+          "🟣 **N.O.V.A.:** Desplegando stream de audio para amenizar la"
+          " sesión, Jefa."
+      )
       widget_html = """
             <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM5M?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
             """
     elif "hola" in prompt_lower or "despierta" in prompt_lower:
-      response = "🔵 **J.A.R.V.I.S.:** En completo silencio operativo y a su entera disposición, señorita."
+      response = (
+          "🟣 **N.O.V.A.:** En línea, discreta y esperando sus órdenes, Jefa."
+      )
     else:
-      response = f"🔵 **J.A.R.V.I.S.:** Directiva '{prompt}' procesada. Manteniendo perfil bajo."
+      response = f"🟣 **N.O.V.A.:** Directiva '{prompt}' procesada con precisión táctica."
 
     msg_dict = {"role": "assistant", "content": response}
     if widget_html:
       msg_dict["widget_musica"] = widget_html
 
-    st.session_state.messages.append(msg_dict)
+    st.session_state.messages_nova.append(msg_dict)
 
     with st.chat_message("assistant"):
       st.markdown(response)
