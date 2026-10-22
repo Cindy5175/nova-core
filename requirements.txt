@@ -1,5 +1,2 @@
 streamlit
-requests
-pandas
-gTTS
-pytz
+google-generativeai
