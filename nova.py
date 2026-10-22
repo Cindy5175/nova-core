@@ -27,8 +27,7 @@ st.markdown(
 )
 
 st.markdown(
-    '<p class="console-title">N.O.V.A. — UNIDAD TÁCTICA SEGURA</p>',
-    unsafe_allow_html=True,
+    '<p class="console-title">N.O.V.A. — C.I.T</p>', unsafe_allow_html=True
 )
 st.markdown("---")
 
@@ -53,7 +52,6 @@ if not st.session_state.authenticated:
   audio_data = st.audio_input("🎙️ Presiona para grabar tu firma vocal")
 
   if audio_data is not None:
-    # Se detectó la muestra de audio
     st.session_state.authenticated = True
     st.success("✅ [HUELLA VOCAL DETECTADA]: Autenticación correcta, Jefa.")
     st.rerun()
@@ -66,22 +64,18 @@ else:
       unsafe_allow_html=True,
   )
 
-  # Inicializar el historial de mensajes
   if "messages" not in st.session_state:
     st.session_state.messages = []
 
-  # Mostrar mensajes guardados
   for message in st.session_state.messages:
     with st.chat_message(message["role"]):
       st.markdown(message["content"])
 
-  # Caja de entrada del chat
   if prompt := st.chat_input("¿Qué directiva táctica ejecutamos hoy?"):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
       st.markdown(prompt)
 
-    # Respuesta de la unidad táctica NOVA
     response = (
         f"🌟 **N.O.V.A.:** Directiva '{prompt}' analizada. Unidad táctica lista"
         " a su orden, Jefa."
