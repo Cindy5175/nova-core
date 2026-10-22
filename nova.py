@@ -1,3 +1,4 @@
+import google.generativeai as genai
 import streamlit as st
 
 # Configuración de la página
@@ -31,6 +32,23 @@ st.markdown(
 )
 st.markdown("---")
 
+# Configurar el modelo de Inteligencia Artificial para NOVA mediante Secrets
+try:
+  api_key = st.secrets["GEMINI_API_KEY"]
+  genai.configure(api_key=api_key)
+  model = genai.GenerativeModel(
+      model_name="gemini-1.5-flash",
+      system_instruction=(
+          "Eres N.O.V.A., una inteligencia artificial táctica y avanzada del"
+          " taller Stark. Te diriges a la usuaria como 'Jefa'. Eres audaz,"
+          " rápida, leal y eficiente. Respondes con datos precisos, actitud"
+          " táctica e inteligencia real a cualquier consulta (clima,"
+          " información, ciencia, tareas)."
+      ),
+  )
+except Exception:
+  model = None
+
 # Estado de autenticación e historial de mensajes
 if "authenticated" not in st.session_state:
   st.session_state.authenticated = False
@@ -57,7 +75,6 @@ if not st.session_state.authenticated:
   if audio_data is not None:
     st.session_state.authenticated = True
 
-    # Mensaje inicial de bienvenida personalizado para N.O.V.A.
     st.session_state.messages.append(
         {"role": "user", "content": "🎙️ [Comando Vocal]: Hola N.O.V.A."}
     )
@@ -72,7 +89,7 @@ if not st.session_state.authenticated:
     st.success("✅ [HUELLA VOCAL DETECTADA]: Autenticación correcta, Jefa.")
     st.rerun()
 
-# --- MÓDULO 2: CHAT INTERACTIVO CON PERSONALIDAD TÁCTICA ---
+# --- MÓDULO 2: SUPER IA Y CHAT INTERACTIVO ---
 else:
   st.markdown(
       "<p style='color: #00f0ff; font-weight: bold;'>🌟 SISTEMA DESBLOQUEADO —"
@@ -85,7 +102,7 @@ else:
     with st.chat_message(message["role"]):
       st.markdown(message["content"])
 
-  # Entrada del chat con respuestas según lo que preguntes
+  # Entrada del chat para interactuar con la Super IA táctica
   if prompt := st.chat_input("¿Qué directiva táctica ejecutamos hoy, Jefa?"):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
@@ -93,30 +110,27 @@ else:
 
     prompt_lower = prompt.lower().strip()
 
-    # Lógica de respuestas dinámicas según la consulta
-    if any(
-        saludo in prompt_lower
-        for saludo in ["hola", "buenas", "que tal", "nova"]
-    ):
-      response = (
-          "🌟 **N.O.V.A.:** A sus órdenes, Jefa. Todos los sistemas funcionando"
-          " al 100%. ¿Qué tenemos en agenda?"
-      )
-    elif "despierta" in prompt_lower or "despierto" in prompt_lower:
+    # 1. Respuestas de personalidad rápida o activaciones especiales
+    if "despierta" in prompt_lower or "despierto" in prompt_lower:
       response = (
           "🌟 **N.O.V.A.:** Jamás duermo, Jefa. Los núcleos C.I.T están listos"
           " para cualquier misión."
       )
-    elif "quien eres" in prompt_lower or "quién eres" in prompt_lower:
-      response = (
-          "🌟 **N.O.V.A.:** Soy N.O.V.A., su unidad táctica C.I.T. Diseñada"
-          " para ejecutar, optimizar y proteger sus proyectos con máxima"
-          " precisión."
-      )
+    # 2. Procesamiento con la Super IA de Gemini
+    elif model is not None:
+      try:
+        ai_response = model.generate_content(prompt)
+        response = f"🌟 **N.O.V.A.:** {ai_response.text}"
+      except Exception as e:
+        response = (
+            "🌟 **N.O.V.A.:** Alerta táctica: Error al conectar con los"
+            f" servidores principales: {e}"
+        )
+    # 3. Respaldo por si falta configurar los secrets
     else:
       response = (
-          f"🌟 **N.O.V.A.:** Comprendido, Jefa. Procesando '{prompt}' a máxima"
-          " velocidad. Considerelo en marcha."
+          f"🌟 **N.O.V.A.:** Directiva '{prompt}' registrada. (Configure"
+          " GEMINI_API_KEY en los Secrets para habilitar la Super IA)."
       )
 
     st.session_state.messages.append({"role": "assistant", "content": response})
